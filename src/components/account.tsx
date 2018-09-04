@@ -7,6 +7,7 @@ import * as React from 'react';
 import { ETHER_TOKEN, tokensByNetwork } from '../tokens';
 
 const ACCOUNT_CHECK_INTERVAL_MS = 2000;
+const GREEN = 'rgb(77, 197, 92)';
 
 interface Props {
     web3Wrapper: Web3Wrapper;
@@ -133,7 +134,7 @@ export class Account extends React.Component<Props, AccountState> {
             </div>
         );
 
-        if (accountBalances) {
+        if (!_.isEmpty(accountBalances)) {
             const balancesString = _.map(accountBalances, (tokenBalance: TokenBalanceAllowance) => {
                 const { name, symbol } = tokenBalance.token;
                 // Convert to the human readable amount based off the token decimals
@@ -169,8 +170,8 @@ export class Account extends React.Component<Props, AccountState> {
                 Below you will find the Account and token balances. The lock icon ({' '}
                 <Icon isSize="small" className="fa fa-lock" />) indicates that this token is not isTradeable on 0x, to
                 unlock the token click the lock icon. The tick icon ({' '}
-                <Icon isSize="small" className="fa fa-check-circle" style={{ color: 'rgb(77, 197, 92)' }} /> ) indicates
-                that this token is isTradeable on 0x.
+                <Icon isSize="small" className="fa fa-check-circle" style={{ color: GREEN }} /> ) indicates that this
+                token is isTradeable on 0x.
                 <Subtitle isSize={6}>Account: {selectedAccount}</Subtitle>
                 <Columns>
                     <Column isSize={3}>{contentRender}</Column>
@@ -184,7 +185,7 @@ export class Account extends React.Component<Props, AccountState> {
         let allowanceRender;
         if (tokenBalance.isTradeable) {
             allowanceRender = tokenBalance.allowance.greaterThan(0) ? (
-                <Icon isSize="small" className="fa fa-check-circle" style={{ color: 'rgb(77, 197, 92)' }} />
+                <Icon isSize="small" className="fa fa-check-circle" style={{ color: GREEN }} />
             ) : (
                 <a href="#" onClick={() => void this.setProxyAllowanceAsync(tokenBalance.token.address)}>
                     <Icon isSize="small" className="fa fa-lock" />
