@@ -6,6 +6,8 @@ import * as React from 'react';
 
 import { ETHER_TOKEN, tokensByNetwork } from '../tokens';
 
+const ACCOUNT_CHECK_INTERVAL_MS = 2000;
+
 interface Props {
     web3Wrapper: Web3Wrapper;
     erc20TokenWrapper: ERC20TokenWrapper;
@@ -18,11 +20,12 @@ interface Token {
     symbol: string;
     decimals: number;
 }
+
 interface TokenBalanceAllowance {
     token: Token;
     balance: BigNumber;
     allowance: BigNumber;
-    tradeable: boolean;
+    isTradeable: boolean;
 }
 
 interface AccountState {
@@ -37,14 +40,14 @@ export class Account extends React.Component<Props, AccountState> {
         void this.fetchAccountDetailsAsync();
         setInterval(() => {
             void this.checkAccountChangeAsync();
-        }, 2000);
+        }, ACCOUNT_CHECK_INTERVAL_MS);
     }
-    public fetchAccountDetailsAsync = async () => {
+    public async fetchAccountDetailsAsync() {
         const { web3Wrapper, erc20TokenWrapper } = this.props;
         const { balances } = this.state;
         const addresses = await web3Wrapper.getAvailableAddressesAsync();
         const address = addresses[0];
-        if (!address) {
+        if (_.isUndefined(address)) {
             return;
         }
         const networkId = await web3Wrapper.getNetworkIdAsync();
@@ -56,7 +59,7 @@ export class Account extends React.Component<Props, AccountState> {
                 const balance = await erc20TokenWrapper.getBalanceAsync(token.address, address);
                 const allowance = await erc20TokenWrapper.getProxyAllowanceAsync(token.address, address);
                 const numberBalance = new BigNumber(balance);
-                return { token, balance: numberBalance, allowance, tradeable: true };
+                return { token, balance: numberBalance, allowance, isTradeable: true };
             },
         );
 
@@ -70,23 +73,22 @@ export class Account extends React.Component<Props, AccountState> {
                 token: ETHER_TOKEN,
                 balance: weiBalance,
                 allowance: new BigNumber(0),
-                tradeable: false,
+                isTradeable: false,
             } as TokenBalanceAllowance,
         ];
 
-        // Update the state in React
         this.setState(prev => {
             const prevSelectedAccount = prev.selectedAccount;
             const selectedAccount = prevSelectedAccount !== address ? address : prevSelectedAccount;
             return { ...prev, balances, selectedAccount };
         });
     }
-    public checkAccountChangeAsync = async () => {
+    public async checkAccountChangeAsync() {
         const { web3Wrapper } = this.props;
         const { selectedAccount } = this.state;
         const addresses = await web3Wrapper.getAvailableAddressesAsync();
         const address = addresses[0];
-        if (!address) {
+        if (_.isUndefined(address)) {
             return;
         }
         if (selectedAccount !== address) {
@@ -95,13 +97,13 @@ export class Account extends React.Component<Props, AccountState> {
             void this.fetchAccountDetailsAsync();
         }
     }
-    public setProxyAllowanceAsync = async (tokenAddress: string) => {
+    public async setProxyAllowanceAsync(tokenAddress: string) {
         const { erc20TokenWrapper } = this.props;
         const { selectedAccount } = this.state;
         const txHash = await erc20TokenWrapper.setUnlimitedProxyAllowanceAsync(tokenAddress, selectedAccount);
         void this.transactionSubmittedAsync(txHash);
     }
-    public transactionSubmittedAsync = async (txHash: string) => {
+    public async transactionSubmittedAsync(txHash: string) {
         const { toastManager, web3Wrapper } = this.props;
         console.log(txHash);
         toastManager.add(`Transaction Submitted: ${txHash}`, {
@@ -165,10 +167,10 @@ export class Account extends React.Component<Props, AccountState> {
         return (
             <Content style={{ marginTop: '15px' }}>
                 Below you will find the Account and token balances. The lock icon ({' '}
-                <Icon isSize="small" className="fa fa-lock" />) indicates that this token is not tradeable on 0x, to
+                <Icon isSize="small" className="fa fa-lock" />) indicates that this token is not isTradeable on 0x, to
                 unlock the token click the lock icon. The tick icon ({' '}
                 <Icon isSize="small" className="fa fa-check-circle" style={{ color: 'rgb(77, 197, 92)' }} /> ) indicates
-                that this token is tradeable on 0x.
+                that this token is isTradeable on 0x.
                 <Subtitle isSize={6}>Account: {selectedAccount}</Subtitle>
                 <Columns>
                     <Column isSize={3}>{contentRender}</Column>
@@ -180,7 +182,7 @@ export class Account extends React.Component<Props, AccountState> {
 
     public renderAllowanceForTokenBalance(tokenBalance: TokenBalanceAllowance): React.ReactNode {
         let allowanceRender;
-        if (tokenBalance.tradeable) {
+        if (tokenBalance.isTradeable) {
             allowanceRender = tokenBalance.allowance.greaterThan(0) ? (
                 <Icon isSize="small" className="fa fa-check-circle" style={{ color: 'rgb(77, 197, 92)' }} />
             ) : (

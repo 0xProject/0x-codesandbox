@@ -41,7 +41,7 @@ export class WrapEth extends React.Component<Props, WrapEthState> {
                 onTxSubmitted(txHash);
             }
         }
-    }
+    };
     public render(): React.ReactNode {
         return (
             <div>
@@ -75,7 +75,13 @@ export class WrapEth extends React.Component<Props, WrapEthState> {
             </div>
         );
     }
-    public onInputChange = (e: any) => this.setState({ amount: e.target.value });
-    public wrapEthAsync = async () => void this.wrapOrUnwrapEthAsync(true);
-    public unwrapEthAsync = async () => void this.wrapOrUnwrapEthAsync(false);
+    public onInputChange(e: any) {
+        this.setState({ amount: e.target.value });
+    }
+    public async wrapEthAsync() {
+        void this.wrapOrUnwrapEthAsync(true);
+    }
+    public async unwrapEthAsync() {
+        void this.wrapOrUnwrapEthAsync(false);
+    }
 }

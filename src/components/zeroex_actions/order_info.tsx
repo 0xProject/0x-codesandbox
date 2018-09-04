@@ -18,7 +18,7 @@ interface OrderInfoState {
 }
 
 export class GetOrderInfo extends React.Component<Props, OrderInfoState> {
-    public getInfoAsync = async () => {
+    public async getInfoAsync() {
         const { order } = this.state;
         const { contractWrappers } = this.props;
         if (order) {

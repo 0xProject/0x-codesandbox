@@ -16,7 +16,7 @@ interface CancelOrderState {
 }
 
 export class CancelOrder extends React.Component<Props, CancelOrderState> {
-    public cancelOrderAsync = async () => {
+    public async cancelOrderAsync() {
         const { orderJSON } = this.state;
         const { contractWrappers, onTxSubmitted } = this.props;
         if (orderJSON) {
