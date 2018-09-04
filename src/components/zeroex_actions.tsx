@@ -43,7 +43,7 @@ export class ZeroExActions extends React.Component<Props, ZeroExActionsState> {
                 autoDismiss: true,
             });
         }
-    }
+    };
     public render(): React.ReactNode {
         const { selectedForm } = this.state;
         const { web3Wrapper, contractWrappers } = this.props;

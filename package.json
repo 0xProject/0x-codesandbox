@@ -4,6 +4,7 @@
     "description": "",
     "keywords": [],
     "homepage": "https://0xproject.com",
+    "license": "Apache-2.0",
     "main": "src/index.tsx",
     "dependencies": {
         "0x.js": "1.0.1-rc.6",
@@ -26,13 +27,15 @@
         "@types/react-dom": "16.0.7",
         "tslint": "^5.11.0",
         "types-bn": "0.0.1",
-        "typescript": "^3.0.1"
+        "typescript": "^3.0.1",
+        "prettier": "^1.11.1"
     },
     "scripts": {
         "lint": "tslint --format stylish --project . 'src/**/*.ts' 'src/**/*.tsx'",
         "start": "react-scripts-ts start",
         "build": "react-scripts-ts build",
         "test": "react-scripts-ts test --env=jsdom",
-        "eject": "react-scripts-ts eject"
+        "eject": "react-scripts-ts eject",
+        "prettier": "prettier --write '**/*.{ts,tsx,json,md}' --config .prettierrc"
     }
 }
