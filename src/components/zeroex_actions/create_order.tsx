@@ -99,7 +99,7 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
         // Store the signed Order
         this.setState(prevState => ({ ...prevState, signedOrder, orderHash: orderHashHex }));
         return signedOrder;
-    };
+    }
     public render(): React.ReactNode {
         const signedOrderRender = this.state.signedOrder ? (
             <div>
@@ -167,14 +167,14 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
                 ? { ...prevState, makerTokenSymbol: symbol }
                 : { ...prevState, takerTokenSymbol: symbol };
         });
-    };
+    }
     public orderTokenAmountChanged = (amount: string, traderSide: TraderSide) => {
         this.setState(prevState => {
             return traderSide === TraderSide.MAKER
                 ? { ...prevState, makerAmount: amount }
                 : { ...prevState, takerAmount: amount };
         });
-    };
+    }
     public buildTokenSelector = (traderSide: TraderSide) => {
         const selected = traderSide === TraderSide.MAKER ? this.state.makerTokenSymbol : this.state.takerTokenSymbol;
         return (
@@ -188,5 +188,5 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
                 })}
             </Select>
         );
-    };
+    }
 }

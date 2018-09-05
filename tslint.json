@@ -1,12 +1,15 @@
 {
     "extends": ["@0xproject/tslint-config"],
     "rules": {
+        "typedef": false,
         "no-implicit-dependencies": false,
         "no-object-literal-type-assertion": false,
         "completed-docs": false,
         "prefer-function-over-method": false,
         "custom-no-magic-numbers": false,
         "no-console": false,
+        "no-unbound-method": false,
+        "no-unnecessary-type-assertion": false,
         "jsx-no-lambda": false
     }
 }

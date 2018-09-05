@@ -13,9 +13,11 @@ import { Nav } from './components/nav';
 import { Welcome } from './components/welcome';
 import { ZeroExActions } from './components/zeroex_actions';
 
-// Kovan is a test network
+// Kovan and Ropsten are test networks
 // Please ensure you have Metamask installed
-// and it is connected to the Kovan test network
+// and it is connected to the correct test network
+// const ROPSTEN_NETWORK_ID = 3;
+// const ROPSTEN_RPC = 'https://ropsten.infura.io';
 const KOVAN_NETWORK_ID = 42;
 const KOVAN_RPC = 'https://kovan.infura.io';
 

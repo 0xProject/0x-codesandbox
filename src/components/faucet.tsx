@@ -42,12 +42,12 @@ export class Faucet extends React.Component<Props, {}> {
         const url = `https://faucet.0xproject.com/zrx/${address}`;
         await fetch(url);
         console.log('Dispense ZRX requested');
-    };
+    }
     public dispenseETH = async (): Promise<void> => {
         const addresses = await this.props.web3Wrapper.getAvailableAddressesAsync();
         const address = addresses[0];
         const url = `https://faucet.0xproject.com/ether/${address}`;
         await fetch(url);
         console.log('Dispense ETH requested');
-    };
+    }
 }

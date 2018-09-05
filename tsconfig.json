@@ -10,6 +10,7 @@
         "jsx": "react",
         "moduleResolution": "node",
         "rootDir": "src",
+        "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,

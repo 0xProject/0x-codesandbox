@@ -27,7 +27,7 @@ export class FillOrder extends React.Component<Props, FillOrderState> {
         // Call fillOrder on the Exchange contract
         const txHash = await contractWrappers.exchange.fillOrderAsync(signedOrder, takerFillAmount, takerAddress);
         return txHash;
-    };
+    }
     public render(): React.ReactNode {
         return (
             <div>
@@ -63,5 +63,5 @@ export class FillOrder extends React.Component<Props, FillOrderState> {
             const txHash = await this.fillOrderAsync(signedOrder);
             this.props.onTxSubmitted(txHash);
         }
-    };
+    }
 }

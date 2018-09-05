@@ -31,22 +31,44 @@ export const ETHER_TOKEN = {
     symbol: 'ETH',
 };
 export const tokensByNetwork = {
-    42: {
+    3: {
         ZRX: {
             ...tokens.ZRX,
-            address: '0x6ff6c0ff1d68b964901f986d4c9fa3ac68346570',
+            address: '0xff67881f8d12f372d91baae9752eb3631ff0ed00',
         },
         MKR: {
             ...tokens.MKR,
-            address: '0x1dad4783cf3fe3085c1426157ab175a6119a04ba',
+            address: '0x06732516acd125b6e83c127752ed5f027e1b276e',
         },
         GNT: {
             ...tokens.GNT,
-            address: '0xef7fff64389b814a946f3e92105513705ca6b990',
+            address: '0x7f8acc55a359ca4517c30510566ac35b800f7cac',
         },
         REP: {
             ...tokens.REP,
-            address: '0xb18845c260f680d5b9d84649638813e342e4f8c9',
+            address: '0xb0b443fe0e8a04c4c85e8fda9c5c1ccc057d6653',
+        },
+        WETH: {
+            ...tokens.WETH,
+            address: '0xc778417e063141139fce010982780140aa0cd5ab',
+        },
+    },
+    42: {
+        ZRX: {
+            ...tokens.ZRX,
+            address: '0x2002d3812f58e35f0ea1ffbf80a75a38c32175fa',
+        },
+        MKR: {
+            ...tokens.MKR,
+            address: '0x7b6b10caa9e8e9552ba72638ea5b47c25afea1f3',
+        },
+        GNT: {
+            ...tokens.GNT,
+            address: '0x31fb614e223706f15d0d3c5f4b08bdf0d5c78623',
+        },
+        REP: {
+            ...tokens.REP,
+            address: '0x8cb3971b8eb709c14616bd556ff6683019e90d9c',
         },
         WETH: {
             ...tokens.WETH,

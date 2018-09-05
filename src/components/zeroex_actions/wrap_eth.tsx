@@ -41,7 +41,7 @@ export class WrapEth extends React.Component<Props, WrapEthState> {
                 onTxSubmitted(txHash);
             }
         }
-    };
+    }
     public render(): React.ReactNode {
         return (
             <div>
