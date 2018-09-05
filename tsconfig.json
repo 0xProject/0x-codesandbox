@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "outDir": "build/dist",
+        "typeRoots": ["node_modules/@0xproject/typescript-typings/types", "node_modules/@types"],
+        "module": "esnext",
+        "target": "es5",
+        "lib": ["es6", "dom"],
+        "sourceMap": true,
+        "allowJs": true,
+        "jsx": "react",
+        "moduleResolution": "node",
+        "rootDir": "src",
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "esModuleInterop": true,
+        "noUnusedLocals": true
+    },
+    "exclude": ["node_modules", "build", "scripts"]
+}
