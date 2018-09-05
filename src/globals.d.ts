@@ -12,6 +12,7 @@ interface Token {
     decimals: number;
     isTradeable: boolean;
     isMintable: boolean;
+    image: string;
 }
 
 interface TokenBalanceAllowance {

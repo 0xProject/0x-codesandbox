@@ -5,6 +5,7 @@ export const TOKENS = {
         symbol: 'ZRX',
         isTradeable: true,
         isMintable: true,
+        image: 'https://0xproject.com/images/token_icons/ZRX.png',
     },
     MKR: {
         name: 'Maker DAO',
@@ -12,6 +13,7 @@ export const TOKENS = {
         symbol: 'MKR',
         isTradeable: true,
         isMintable: true,
+        image: 'https://0xproject.com/images/token_icons/MKR.png',
     },
     GNT: {
         name: 'Golem Network Token',
@@ -19,6 +21,7 @@ export const TOKENS = {
         symbol: 'GNT',
         isTradeable: true,
         isMintable: true,
+        image: 'https://0xproject.com/images/token_icons/GNT.png',
     },
     REP: {
         name: 'Augur Reputation Token',
@@ -26,6 +29,7 @@ export const TOKENS = {
         symbol: 'REP',
         isTradeable: true,
         isMintable: true,
+        image: 'https://0xproject.com/images/token_icons/REP.png',
     },
     WETH: {
         name: 'Wrapped ETH',
@@ -33,6 +37,7 @@ export const TOKENS = {
         symbol: 'WETH',
         isTradeable: true,
         isMintable: false,
+        image: 'https://0xproject.com/images/token_icons/WETH.png',
     },
 };
 export const ETHER_TOKEN: Token = {
@@ -42,6 +47,7 @@ export const ETHER_TOKEN: Token = {
     symbol: 'ETH',
     isTradeable: false,
     isMintable: false,
+    image: 'https://0xproject.com/images/ether.png',
 };
 export const TOKENS_BY_NETWORK: { [networkId: number]: { [tokenSymbol: string]: Token } } = {
     3: {

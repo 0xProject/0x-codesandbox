@@ -140,7 +140,8 @@ export class Account extends React.Component<Props, AccountState> {
 
         if (!_.isEmpty(accountBalances)) {
             const balancesString = _.map(accountBalances, (tokenBalance: TokenBalanceAllowance) => {
-                const { name, symbol } = tokenBalance.token;
+                const { name, symbol, image } = tokenBalance.token;
+                const tokenIcon = <img src={image} style={{ width: '28px', height: '28px' }} />;
                 // Convert to the human readable amount based off the token decimals
                 const balance = Web3Wrapper.toUnitAmount(tokenBalance.balance, tokenBalance.token.decimals);
                 const balanceRender = balance.toFixed(4);
@@ -148,6 +149,7 @@ export class Account extends React.Component<Props, AccountState> {
                 const mintRender = this.renderMintForTokenBalance(tokenBalance);
                 return (
                     <tr key={name}>
+                        <td>{tokenIcon}</td>
                         <td>{symbol}</td>
                         <td>{balanceRender}</td>
                         <td>{allowanceRender}</td>
@@ -161,6 +163,7 @@ export class Account extends React.Component<Props, AccountState> {
                         <thead>
                             <tr>
                                 <th>Token</th>
+                                <th>Symbol</th>
                                 <th>Balance</th>
                                 <th>Allowance</th>
                                 <th>Mint</th>
