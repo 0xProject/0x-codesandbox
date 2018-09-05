@@ -106,7 +106,6 @@ export class Account extends React.Component<Props, AccountState> {
     }
     public async transactionSubmittedAsync(txHash: string) {
         const { toastManager, web3Wrapper } = this.props;
-        console.log(txHash);
         toastManager.add(`Transaction Submitted: ${txHash}`, {
             appearance: 'success',
             autoDismiss: true,
@@ -117,14 +116,18 @@ export class Account extends React.Component<Props, AccountState> {
             appearance,
             autoDismiss: true,
         });
-        console.log(receipt);
         await this.fetchAccountDetailsAsync();
     }
     public render(): React.ReactNode {
         const { balances, selectedAccount } = this.state;
         const accountBalances = balances[selectedAccount];
         const fetchBalancesButton = (
-            <Button isSize="small" isColor="info" id="fetchAccountBalances" onClick={this.fetchAccountDetailsAsync}>
+            <Button
+                isSize="small"
+                isColor="info"
+                id="fetchAccountBalances"
+                onClick={this.fetchAccountDetailsAsync.bind(this)}
+            >
                 Fetch Balances
             </Button>
         );

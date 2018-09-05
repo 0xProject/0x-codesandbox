@@ -8,7 +8,6 @@
         "prefer-function-over-method": false,
         "custom-no-magic-numbers": false,
         "no-console": false,
-        "no-unbound-method": false,
         "no-unnecessary-type-assertion": false,
         "jsx-no-lambda": false
     }

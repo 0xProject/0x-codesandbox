@@ -48,15 +48,23 @@ export class CancelOrder extends React.Component<Props, CancelOrderState> {
                     </div>
                 </PanelBlock>
                 <PanelBlockField label="Order">
-                    <TextArea type="text" placeholder="Order" onChange={this.onOrderChange} />
+                    <TextArea type="text" placeholder="Order" onChange={this.onOrderChange.bind(this)} />
                 </PanelBlockField>
                 <PanelBlock>
-                    <Button onClick={this.cancelOrderAsync} isFullWidth={true} isSize="small" isColor="primary">
+                    <Button
+                        onClick={this.cancelOrderAsync.bind(this)}
+                        isFullWidth={true}
+                        isSize="small"
+                        isColor="primary"
+                    >
                         Cancel Order
                     </Button>
                 </PanelBlock>
             </div>
         );
     }
-    public onOrderChange = (e: any) => this.setState(prevState => ({ ...prevState, orderJSON: e.target.value }));
+    public onOrderChange(e: any) {
+        const value = e.target.value;
+        this.setState(prevState => ({ ...prevState, orderJSON: value }));
+    }
 }

@@ -66,7 +66,7 @@ export class GetOrderInfo extends React.Component<Props, OrderInfoState> {
                 </PanelBlockField>
                 {orderInfoRender}
                 <PanelBlock>
-                    <Button onClick={this.getInfoAsync} isFullWidth={true} isSize="small" isColor="primary">
+                    <Button onClick={this.getInfoAsync.bind(this)} isFullWidth={true} isSize="small" isColor="primary">
                         Get Order Info
                     </Button>
                 </PanelBlock>

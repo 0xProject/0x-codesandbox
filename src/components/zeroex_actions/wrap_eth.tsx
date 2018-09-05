@@ -53,20 +53,25 @@ export class WrapEth extends React.Component<Props, WrapEthState> {
                     </div>
                 </PanelBlock>
                 <PanelBlockField label="Amount">
-                    <Input type="text" placeholder="1" value={this.state.amount} onChange={this.onInputChange} />
+                    <Input
+                        type="text"
+                        placeholder="1"
+                        value={this.state.amount}
+                        onChange={this.onInputChange.bind(this)}
+                    />
                 </PanelBlockField>
                 <PanelBlock>
                     <Field isGrouped={true} isHorizontal={true}>
                         <Control>
                             <Button
                                 style={{ marginRight: '10px' }}
-                                onClick={this.wrapEthAsync}
+                                onClick={this.wrapEthAsync.bind(this)}
                                 isSize="small"
                                 isColor="primary"
                             >
                                 Wrap
                             </Button>
-                            <Button onClick={this.unwrapEthAsync} isSize="small" isColor="primary">
+                            <Button onClick={this.unwrapEthAsync.bind(this)} isSize="small" isColor="primary">
                                 Unwrap
                             </Button>
                         </Control>
