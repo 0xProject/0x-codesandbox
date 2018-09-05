@@ -6,7 +6,7 @@ import * as React from 'react';
 
 import { artifacts } from '../artifacts';
 import { DummyERC20TokenContract } from '../contract_wrappers/dummy_erc20_token';
-import { ETHER_TOKEN, tokensByNetwork } from '../tokens';
+import { ETHER_TOKEN, TOKENS_BY_NETWORK } from '../tokens';
 
 const ACCOUNT_CHECK_INTERVAL_MS = 2000;
 const MAX_MINTABLE_AMOUNT = new BigNumber('10000000000000000000000');
@@ -41,7 +41,7 @@ export class Account extends React.Component<Props, AccountState> {
             return;
         }
         const networkId = await web3Wrapper.getNetworkIdAsync();
-        const tokens = tokensByNetwork[networkId];
+        const tokens = TOKENS_BY_NETWORK[networkId];
         // Fetch all the Balances for all of the tokens
         const allBalancesAsync = _.map(
             tokens,
@@ -92,15 +92,17 @@ export class Account extends React.Component<Props, AccountState> {
         const txHash = await erc20TokenWrapper.setUnlimitedProxyAllowanceAsync(tokenAddress, selectedAccount);
         void this.transactionSubmittedAsync(txHash);
     }
-    public async mintTokenAsync(tokenAddress: string) {
+    public async mintTokenAsync(tokenBalance: TokenBalanceAllowance) {
         const { selectedAccount } = this.state;
         const token = new DummyERC20TokenContract(
             artifacts.DummyERC20Token.compilerOutput.abi,
-            tokenAddress,
+            tokenBalance.token.address,
             this.props.web3Wrapper.getProvider(),
         );
         const maxAmount = await token.MAX_MINT_AMOUNT.callAsync();
-        const txHash = await token.mint.sendTransactionAsync(maxAmount, { from: selectedAccount });
+        const balanceDiffToMaxAmount = maxAmount.minus(tokenBalance.balance);
+        const amountToMint = BigNumber.min(maxAmount, balanceDiffToMaxAmount);
+        const txHash = await token.mint.sendTransactionAsync(amountToMint, { from: selectedAccount });
         void this.transactionSubmittedAsync(txHash);
     }
     public async transactionSubmittedAsync(txHash: string) {
@@ -173,10 +175,11 @@ export class Account extends React.Component<Props, AccountState> {
         return (
             <Content style={{ marginTop: '15px' }}>
                 Below you will find the Account and token balances. The lock icon ({' '}
-                <Icon isSize="small" className="fa fa-lock" />) indicates that this token is not isTradeable on 0x, to
+                <Icon isSize="small" className="fa fa-lock" /> ) indicates that this token is not isTradeable on 0x, to
                 unlock the token click the lock icon. The tick icon ({' '}
                 <Icon isSize="small" className="fa fa-check-circle" style={{ color: GREEN }} /> ) indicates that this
-                token is isTradeable on 0x.
+                token is isTradeable on 0x. Some tokens are mintable on the test networks (up to a certain amount) you
+                can mint tokens by clicking the mint ( <Icon isSize="small" className="fa fa-coins" /> ) symbol.
                 <Subtitle isSize={6}>Account: {selectedAccount}</Subtitle>
                 <Columns>
                     <Column isSize={3}>{contentRender}</Column>
@@ -203,7 +206,7 @@ export class Account extends React.Component<Props, AccountState> {
     public renderMintForTokenBalance(tokenBalance: TokenBalanceAllowance): React.ReactNode {
         if (tokenBalance.token.isMintable && tokenBalance.balance.lt(MAX_MINTABLE_AMOUNT)) {
             return (
-                <a href="#" onClick={() => void this.mintTokenAsync(tokenBalance.token.address)}>
+                <a href="#" onClick={() => void this.mintTokenAsync(tokenBalance)}>
                     <Icon isSize="small" className="fa fa-coins" />
                 </a>
             );

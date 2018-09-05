@@ -14,7 +14,7 @@ import { Button, Control, Field, Input, PanelBlock, Select, TextArea } from 'blo
 import * as _ from 'lodash';
 import * as React from 'react';
 
-import { tokens, tokensByNetwork } from '../../tokens';
+import { TOKENS, TOKENS_BY_NETWORK } from '../../tokens';
 import { NULL_ADDRESS, ZERO } from '../../utils';
 import { OpenModule } from '../open_module';
 import { PanelBlockField } from '../panel_block_field';
@@ -42,8 +42,8 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            makerTokenSymbol: tokens.ZRX.symbol,
-            takerTokenSymbol: tokens.WETH.symbol,
+            makerTokenSymbol: TOKENS.ZRX.symbol,
+            takerTokenSymbol: TOKENS.WETH.symbol,
             makerAmount: '1',
             takerAmount: '1',
         };
@@ -58,7 +58,7 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
         // Use the first account as the maker
         const makerAddress = addresses[0];
         // Get the Token Metadata, address, decimals
-        const tokensForNetwork = tokensByNetwork[networkId];
+        const tokensForNetwork = TOKENS_BY_NETWORK[networkId];
         const makerToken = tokensForNetwork[makerTokenSymbol];
         const takerToken = tokensForNetwork[takerTokenSymbol];
         // Encode the selected makerToken as assetData for 0x
@@ -179,7 +179,7 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
         const selected = traderSide === TraderSide.MAKER ? this.state.makerTokenSymbol : this.state.takerTokenSymbol;
         return (
             <Select onChange={(e: any) => this.orderTokenSelected(e.target.value, traderSide)} value={selected}>
-                {_.map(Object.keys(tokens), tokenSymbol => {
+                {_.map(Object.keys(TOKENS), tokenSymbol => {
                     return (
                         <option key={`${tokenSymbol}-${traderSide}`} value={tokenSymbol}>
                             {tokenSymbol}
