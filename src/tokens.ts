@@ -3,34 +3,47 @@ export const tokens = {
         name: '0x Protocol Token',
         decimals: 18,
         symbol: 'ZRX',
+        isTradeable: true,
+        isMintable: true,
     },
     MKR: {
         name: 'Maker DAO',
         decimals: 18,
         symbol: 'MKR',
+        isTradeable: true,
+        isMintable: true,
     },
     GNT: {
         name: 'Golem Network Token',
         decimals: 18,
         symbol: 'GNT',
+        isTradeable: true,
+        isMintable: true,
     },
     REP: {
         name: 'Augur Reputation Token',
         decimals: 18,
         symbol: 'REP',
+        isTradeable: true,
+        isMintable: true,
     },
     WETH: {
         name: 'Wrapped ETH',
         decimals: 18,
         symbol: 'WETH',
+        isTradeable: true,
+        isMintable: false,
     },
 };
-export const ETHER_TOKEN = {
+export const ETHER_TOKEN: Token = {
     name: 'Ether',
+    address: '0x0',
     decimals: 18,
     symbol: 'ETH',
+    isTradeable: false,
+    isMintable: false,
 };
-export const tokensByNetwork = {
+export const tokensByNetwork: { [networkId: number]: { [tokenSymbol: string]: Token } } = {
     3: {
         ZRX: {
             ...tokens.ZRX,

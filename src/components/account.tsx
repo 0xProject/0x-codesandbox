@@ -4,29 +4,18 @@ import { Button, Column, Columns, Content, Icon, Subtitle, Table } from 'bloomer
 import * as _ from 'lodash';
 import * as React from 'react';
 
+import { artifacts } from '../artifacts';
+import { DummyERC20TokenContract } from '../contract_wrappers/dummy_erc20_token';
 import { ETHER_TOKEN, tokensByNetwork } from '../tokens';
 
 const ACCOUNT_CHECK_INTERVAL_MS = 2000;
+const MAX_MINTABLE_AMOUNT = new BigNumber('10000000000000000000000');
 const GREEN = 'rgb(77, 197, 92)';
 
 interface Props {
     web3Wrapper: Web3Wrapper;
     erc20TokenWrapper: ERC20TokenWrapper;
     toastManager: { add: (msg: string, appearance: {}) => void };
-}
-
-interface Token {
-    name: string;
-    address: string;
-    symbol: string;
-    decimals: number;
-}
-
-interface TokenBalanceAllowance {
-    token: Token;
-    balance: BigNumber;
-    allowance: BigNumber;
-    isTradeable: boolean;
 }
 
 interface AccountState {
@@ -60,7 +49,7 @@ export class Account extends React.Component<Props, AccountState> {
                 const balance = await erc20TokenWrapper.getBalanceAsync(token.address, address);
                 const allowance = await erc20TokenWrapper.getProxyAllowanceAsync(token.address, address);
                 const numberBalance = new BigNumber(balance);
-                return { token, balance: numberBalance, allowance, isTradeable: true };
+                return { token, balance: numberBalance, allowance };
             },
         );
 
@@ -74,7 +63,6 @@ export class Account extends React.Component<Props, AccountState> {
                 token: ETHER_TOKEN,
                 balance: weiBalance,
                 allowance: new BigNumber(0),
-                isTradeable: false,
             } as TokenBalanceAllowance,
         ];
 
@@ -102,6 +90,17 @@ export class Account extends React.Component<Props, AccountState> {
         const { erc20TokenWrapper } = this.props;
         const { selectedAccount } = this.state;
         const txHash = await erc20TokenWrapper.setUnlimitedProxyAllowanceAsync(tokenAddress, selectedAccount);
+        void this.transactionSubmittedAsync(txHash);
+    }
+    public async mintTokenAsync(tokenAddress: string) {
+        const { selectedAccount } = this.state;
+        const token = new DummyERC20TokenContract(
+            artifacts.DummyERC20Token.compilerOutput.abi,
+            tokenAddress,
+            this.props.web3Wrapper.getProvider(),
+        );
+        const maxAmount = await token.MAX_MINT_AMOUNT.callAsync();
+        const txHash = await token.mint.sendTransactionAsync(maxAmount, { from: selectedAccount });
         void this.transactionSubmittedAsync(txHash);
     }
     public async transactionSubmittedAsync(txHash: string) {
@@ -144,11 +143,13 @@ export class Account extends React.Component<Props, AccountState> {
                 const balance = Web3Wrapper.toUnitAmount(tokenBalance.balance, tokenBalance.token.decimals);
                 const balanceRender = balance.toFixed(4);
                 const allowanceRender = this.renderAllowanceForTokenBalance(tokenBalance);
+                const mintRender = this.renderMintForTokenBalance(tokenBalance);
                 return (
                     <tr key={name}>
                         <td>{symbol}</td>
                         <td>{balanceRender}</td>
                         <td>{allowanceRender}</td>
+                        <td>{mintRender}</td>
                     </tr>
                 );
             });
@@ -160,6 +161,7 @@ export class Account extends React.Component<Props, AccountState> {
                                 <th>Token</th>
                                 <th>Balance</th>
                                 <th>Allowance</th>
+                                <th>Mint</th>
                             </tr>
                         </thead>
                         <tbody>{balancesString}</tbody>
@@ -183,10 +185,9 @@ export class Account extends React.Component<Props, AccountState> {
             </Content>
         );
     }
-
     public renderAllowanceForTokenBalance(tokenBalance: TokenBalanceAllowance): React.ReactNode {
         let allowanceRender;
-        if (tokenBalance.isTradeable) {
+        if (tokenBalance.token.isTradeable) {
             allowanceRender = tokenBalance.allowance.greaterThan(0) ? (
                 <Icon isSize="small" className="fa fa-check-circle" style={{ color: GREEN }} />
             ) : (
@@ -198,5 +199,16 @@ export class Account extends React.Component<Props, AccountState> {
             allowanceRender = <div />;
         }
         return allowanceRender;
+    }
+    public renderMintForTokenBalance(tokenBalance: TokenBalanceAllowance): React.ReactNode {
+        if (tokenBalance.token.isMintable && tokenBalance.balance.lt(MAX_MINTABLE_AMOUNT)) {
+            return (
+                <a href="#" onClick={() => void this.mintTokenAsync(tokenBalance.token.address)}>
+                    <Icon isSize="small" className="fa fa-coins" />
+                </a>
+            );
+        } else {
+            return <div />;
+        }
     }
 }
