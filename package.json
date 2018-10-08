@@ -7,9 +7,9 @@
     "license": "Apache-2.0",
     "main": "src/index.tsx",
     "dependencies": {
-        "0x.js": "1.0.1",
-        "@0xproject/subproviders": "^2.0.2",
-        "@0xproject/web3-wrapper": "^2.0.2",
+        "0x.js": "1.0.8",
+        "@0xproject/subproviders": "^2.0.7",
+        "@0xproject/web3-wrapper": "^3.0.3",
         "bloomer": "^0.6.3",
         "bulma": "^0.7.1",
         "codesandbox-api": "^0.0.19",
