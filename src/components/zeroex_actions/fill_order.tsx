@@ -1,5 +1,5 @@
 import { ContractWrappers, SignedOrder } from '0x.js';
-import { Web3Wrapper } from '@0xproject/web3-wrapper';
+import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Button, PanelBlock, TextArea } from 'bloomer';
 import * as React from 'react';
 

@@ -7,3 +7,22 @@ body {
 .panel-block {
     display: block;
 }
+
+.content table thead th {
+    border: 0;
+}
+.content table td {
+    border: 0;
+}
+
+.table td {
+    border: 0;
+}
+
+.footer {
+    background-color: #fff;
+}
+
+.panel-tabs {
+    border-bottom: 0;
+}

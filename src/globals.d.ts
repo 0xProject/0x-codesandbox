@@ -4,6 +4,7 @@ declare module '*.json' {
 }
 
 declare module 'react-toast-notifications';
+declare module 'ethereumjs-abi';
 
 interface Token {
     name: string;

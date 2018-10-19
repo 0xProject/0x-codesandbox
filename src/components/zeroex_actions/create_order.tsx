@@ -7,9 +7,8 @@ import {
     orderHashUtils,
     signatureUtils,
     SignedOrder,
-    SignerType,
 } from '0x.js';
-import { Web3Wrapper } from '@0xproject/web3-wrapper';
+import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Button, Control, Field, Input, PanelBlock, Select, TextArea } from 'bloomer';
 import * as _ from 'lodash';
 import * as React from 'react';
@@ -31,6 +30,7 @@ interface CreateOrderState {
     takerAmount: string;
     signedOrder?: SignedOrder;
     orderHash?: string;
+    errorMessage?: string;
 }
 
 enum TraderSide {
@@ -68,7 +68,7 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
         // Amounts are in Unit amounts, 0x requires base units (as many tokens use decimals)
         const makerAssetAmount = Web3Wrapper.toBaseUnitAmount(new BigNumber(makerAmount), makerToken.decimals);
         const takerAssetAmount = Web3Wrapper.toBaseUnitAmount(new BigNumber(takerAmount), takerToken.decimals);
-        const exchangeAddress = contractWrappers.exchange.getContractAddress();
+        const exchangeAddress = contractWrappers.exchange.address;
         // Create the order
         const order: Order = {
             makerAddress, // maker is the first address
@@ -89,16 +89,15 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
         const orderHashHex = orderHashUtils.getOrderHashHex(order);
         const provider = web3Wrapper.getProvider();
         // The maker signs the order as a proof
-        const signature = await signatureUtils.ecSignOrderHashAsync(
-            provider,
-            orderHashHex,
-            makerAddress,
-            SignerType.Metamask,
-        );
-        const signedOrder = { ...order, signature };
-        // Store the signed Order
-        this.setState(prevState => ({ ...prevState, signedOrder, orderHash: orderHashHex }));
-        return signedOrder;
+        try {
+            const signedOrder = await signatureUtils.ecSignOrderAsync(provider, order, makerAddress);
+            // Store the signed Order
+            this.setState(prevState => ({ ...prevState, signedOrder, orderHash: orderHashHex }));
+            return signedOrder;
+        } catch (err) {
+            this.setState({ errorMessage: err.message });
+            return null as any;
+        }
     }
     public render(): React.ReactNode {
         const signedOrderRender = this.state.signedOrder ? (
@@ -141,6 +140,7 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
                 </Field>
             </PanelBlockField>
         );
+        const errorMessageRender = this.state.errorMessage ? <div>{this.state.errorMessage}</div> : <div />;
         return (
             <div>
                 <PanelBlock>
@@ -152,6 +152,7 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
                 </PanelBlock>
                 {makerTokenRender}
                 {takerTokenRender}
+                {errorMessageRender}
                 {signedOrderRender}
                 <PanelBlock>
                     <Button onClick={this.createOrderAsync} isFullWidth={true} isSize="small" isColor="primary">

@@ -1,5 +1,5 @@
 import { BigNumber, ContractWrappers } from '0x.js';
-import { Web3Wrapper } from '@0xproject/web3-wrapper';
+import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Button, Control, Field, Input, PanelBlock } from 'bloomer';
 import * as React from 'react';
 
@@ -24,7 +24,7 @@ export class WrapEth extends React.Component<Props, WrapEthState> {
         const { web3Wrapper, contractWrappers, onTxSubmitted } = this.props;
         const { amount } = this.state;
         // Retrieve the ether token address
-        const etherTokenAddress = contractWrappers.etherToken.getContractAddressIfExists();
+        const etherTokenAddress = contractWrappers.forwarder.etherTokenAddress;
         if (etherTokenAddress) {
             // List all of the available addresses
             const addresses = await web3Wrapper.getAvailableAddressesAsync();

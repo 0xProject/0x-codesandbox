@@ -1,7 +1,7 @@
-import { ContractWrappers, RPCSubprovider, Web3ProviderEngine } from '0x.js';
-import { SignerSubprovider } from '@0xproject/subproviders';
-import { Web3Wrapper } from '@0xproject/web3-wrapper';
+import { ContractWrappers, MetamaskSubprovider } from '0x.js';
+import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Content, Footer } from 'bloomer';
+import * as _ from 'lodash';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { ToastProvider, withToastManager } from 'react-toast-notifications';
@@ -13,61 +13,76 @@ import { Nav } from './components/nav';
 import { Welcome } from './components/welcome';
 import { ZeroExActions } from './components/zeroex_actions';
 
-// Kovan and Ropsten are test networks
-// Please ensure you have Metamask installed
-// and it is connected to the correct test network
-// const ROPSTEN_NETWORK_ID = 3;
-// const ROPSTEN_RPC = 'https://ropsten.infura.io';
-const KOVAN_NETWORK_ID = 42;
-const KOVAN_RPC = 'https://kovan.infura.io';
+interface AppState {
+    web3Wrapper?: Web3Wrapper;
+    contractWrappers?: ContractWrappers;
+    web3?: any;
+}
 
-const App = () => {
-    let renderContent;
-    // Detect if Web3 is found, if not, ask the user to install Metamask
-    const web3 = (window as any).web3;
-    if (web3) {
-        // Set up Web3 Provider Engine with a few helper Subproviders from 0x
-        const providerEngine = new Web3ProviderEngine({ pollingInterval: 10000 });
-        // All signing based requests are handled by the SignerSubprovider
-        providerEngine.addProvider(new SignerSubprovider(web3.currentProvider));
-        // All other requests will fall through to the next subprovider, such as data requests
-        providerEngine.addProvider(new RPCSubprovider(KOVAN_RPC));
-        providerEngine.start();
-
-        const contractWrappers = new ContractWrappers(providerEngine, { networkId: KOVAN_NETWORK_ID });
-        const web3Wrapper = new Web3Wrapper(providerEngine);
-        const erc20TokenWrapper = contractWrappers.erc20Token;
-
-        const AccountWithToasts = withToastManager(Account);
-        const ZeroExActionsWithToasts = withToastManager(ZeroExActions);
-
-        // Browse the individual files for more handy examples
-        renderContent = (
-            <div>
-                <Welcome />
-                <ToastProvider>
-                    <AccountWithToasts erc20TokenWrapper={erc20TokenWrapper} web3Wrapper={web3Wrapper} />
-                    <ZeroExActionsWithToasts contractWrappers={contractWrappers} web3Wrapper={web3Wrapper} />
-                    <Faucet web3Wrapper={web3Wrapper} />
-                </ToastProvider>
+export class MainApp extends React.Component<{}, AppState> {
+    constructor(props: {}) {
+        super(props);
+        void this._initializeWeb3Async();
+    }
+    public render(): React.ReactNode {
+        const AccountWithNotifications = withToastManager(Account);
+        const ZeroExActionsWithNotifications = withToastManager(ZeroExActions);
+        if (!this.state || !this.state.contractWrappers || !this.state.web3Wrapper) {
+            return <div />;
+        }
+        return (
+            <div style={{ paddingLeft: 30, paddingRight: 30, paddingBottom: 30 }}>
+                <Nav web3Wrapper={this.state.web3Wrapper} />
+                <Content className="container">
+                    {this.state.web3 && (
+                        <div>
+                            <Welcome />
+                            <ToastProvider>
+                                <AccountWithNotifications
+                                    erc20TokenWrapper={this.state.contractWrappers.erc20Token}
+                                    web3Wrapper={this.state.web3Wrapper}
+                                />
+                                <ZeroExActionsWithNotifications
+                                    contractWrappers={this.state.contractWrappers}
+                                    web3Wrapper={this.state.web3Wrapper}
+                                />
+                                <Faucet web3Wrapper={this.state.web3Wrapper} />
+                            </ToastProvider>
+                        </div>
+                    )}
+                    {!this.state.web3 && <InstallMetamask />}
+                </Content>
+                <Footer />
             </div>
         );
-    } else {
-        renderContent = <InstallMetamask />;
     }
-    return (
-        <div style={{ paddingLeft: 30, paddingRight: 30, paddingBottom: 30 }}>
-            <Nav />
-            <Content className="container">{renderContent}</Content>
-            <Footer />
-        </div>
-    );
-};
+    private async _initializeWeb3Async(): Promise<void> {
+        const web3 = (window as any).web3;
+        if (web3) {
+            // Wrap Metamask in a compatibility wrapper as some of the behaviour
+            // differs
+            const provider = (web3.currentProvider as any).isMetaMask
+                ? new MetamaskSubprovider(web3.currentProvider)
+                : web3.currentProvider;
+            const web3Wrapper = new Web3Wrapper(provider);
+            const networkId = await web3Wrapper.getNetworkIdAsync();
+            const contractWrappers = new ContractWrappers(provider, { networkId });
+            // Load all of the ABI's into the ABI decoder so logs are decoded
+            // and human readable
+            _.map(
+                [
+                    contractWrappers.exchange.abi,
+                    contractWrappers.erc20Token.abi,
+                    contractWrappers.etherToken.abi,
+                    contractWrappers.forwarder.abi,
+                ],
+                abi => web3Wrapper.abiDecoder.addABI(abi),
+            );
+            this.setState({ web3Wrapper, contractWrappers, web3 });
+        }
+    }
+}
 
 const e = React.createElement;
 const main = document.getElementById('app');
-if (main) {
-    ReactDOM.render(e(App), main);
-} else {
-    console.log('Cannot find main container');
-}
+ReactDOM.render(e(MainApp), main);

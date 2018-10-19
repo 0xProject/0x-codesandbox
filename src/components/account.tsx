@@ -1,16 +1,16 @@
 import { BigNumber, ERC20TokenWrapper } from '0x.js';
-import { Web3Wrapper } from '@0xproject/web3-wrapper';
-import { Button, Column, Columns, Content, Icon, Subtitle, Table } from 'bloomer';
+import { DummyERC20TokenContract } from '@0x/abi-gen-wrappers';
+import { DummyERC20Token } from '@0x/contract-artifacts';
+import { Web3Wrapper } from '@0x/web3-wrapper';
+import { Button, Content, Icon, Subtitle, Table, Tag } from 'bloomer';
 import * as _ from 'lodash';
 import * as React from 'react';
 
-import { artifacts } from '../artifacts';
-import { DummyERC20TokenContract } from '../contract_wrappers/dummy_erc20_token';
 import { ETHER_TOKEN, TOKENS_BY_NETWORK } from '../tokens';
 
 const ACCOUNT_CHECK_INTERVAL_MS = 2000;
 const MAX_MINTABLE_AMOUNT = new BigNumber('10000000000000000000000');
-const GREEN = 'rgb(77, 197, 92)';
+const GREEN = '#00d1b2';
 
 interface Props {
     web3Wrapper: Web3Wrapper;
@@ -45,7 +45,10 @@ export class Account extends React.Component<Props, AccountState> {
         // Fetch all the Balances for all of the tokens
         const allBalancesAsync = _.map(
             tokens,
-            async (token: Token): Promise<TokenBalanceAllowance> => {
+            async (token: Token): Promise<TokenBalanceAllowance | undefined> => {
+                if (!token.address) {
+                    return undefined;
+                }
                 const balance = await erc20TokenWrapper.getBalanceAsync(token.address, address);
                 const allowance = await erc20TokenWrapper.getProxyAllowanceAsync(token.address, address);
                 const numberBalance = new BigNumber(balance);
@@ -54,7 +57,7 @@ export class Account extends React.Component<Props, AccountState> {
         );
 
         const results = await Promise.all(allBalancesAsync);
-        balances[address] = results;
+        balances[address] = _.compact(results);
         // Fetch the Balance of Ether
         const weiBalance = await web3Wrapper.getBalanceInWeiAsync(address);
         balances[address] = [
@@ -95,7 +98,7 @@ export class Account extends React.Component<Props, AccountState> {
     public async mintTokenAsync(tokenBalance: TokenBalanceAllowance) {
         const { selectedAccount } = this.state;
         const token = new DummyERC20TokenContract(
-            artifacts.DummyERC20Token.compilerOutput.abi,
+            (DummyERC20Token as any).compilerOutput.abi,
             tokenBalance.token.address,
             this.props.web3Wrapper.getProvider(),
         );
@@ -139,7 +142,7 @@ export class Account extends React.Component<Props, AccountState> {
         );
 
         if (!_.isEmpty(accountBalances)) {
-            const balancesString = _.map(accountBalances, (tokenBalance: TokenBalanceAllowance) => {
+            const balanceRows = _.map(accountBalances, (tokenBalance: TokenBalanceAllowance) => {
                 const { name, symbol, image } = tokenBalance.token;
                 const tokenIcon = <img src={image} style={{ width: '28px', height: '28px' }} />;
                 // Convert to the human readable amount based off the token decimals
@@ -158,8 +161,8 @@ export class Account extends React.Component<Props, AccountState> {
                 );
             });
             contentRender = (
-                <div>
-                    <Table>
+                <div className="level level-left">
+                    <Table isNarrow={true}>
                         <thead>
                             <tr>
                                 <th>Token</th>
@@ -169,7 +172,7 @@ export class Account extends React.Component<Props, AccountState> {
                                 <th>Mint</th>
                             </tr>
                         </thead>
-                        <tbody>{balancesString}</tbody>
+                        <tbody>{balanceRows}</tbody>
                     </Table>
                 </div>
             );
@@ -178,15 +181,19 @@ export class Account extends React.Component<Props, AccountState> {
         return (
             <Content style={{ marginTop: '15px' }}>
                 Below you will find the Account and token balances. The lock icon ({' '}
-                <Icon isSize="small" className="fa fa-lock" /> ) indicates that this token is not isTradeable on 0x, to
+                <Icon isSize="small" className="fa fa-lock" /> ) indicates that this token is not tradeable on 0x, to
                 unlock the token click the lock icon. The tick icon ({' '}
                 <Icon isSize="small" className="fa fa-check-circle" style={{ color: GREEN }} /> ) indicates that this
-                token is isTradeable on 0x. Some tokens are mintable on the test networks (up to a certain amount) you
-                can mint tokens by clicking the mint ( <Icon isSize="small" className="fa fa-coins" /> ) symbol.
-                <Subtitle isSize={6}>Account: {selectedAccount}</Subtitle>
-                <Columns>
-                    <Column isSize={3}>{contentRender}</Column>
-                </Columns>
+                token is tradeable on 0x. Some tokens are mintable on the test networks (up to a certain amount) you can
+                mint tokens by clicking the mint ( <Icon isSize="small" className="fa fa-coins" /> ) symbol.
+                <Subtitle isSize={6}>
+                    <Tag>Account</Tag> {selectedAccount}
+                </Subtitle>
+                <div className="level">
+                    <div className="level-left">
+                        <div className="level-item">{contentRender}</div>
+                    </div>
+                </div>
                 {fetchBalancesButton}
             </Content>
         );
