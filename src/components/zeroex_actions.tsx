@@ -8,6 +8,7 @@ import { CancelOrder } from './zeroex_actions/cancel_order';
 import { CreateOrder } from './zeroex_actions/create_order';
 import { FillOrder } from './zeroex_actions/fill_order';
 import { GetOrderInfo } from './zeroex_actions/order_info';
+import { TxExplainer } from './zeroex_actions/tx_explainer';
 import { WrapEth } from './zeroex_actions/wrap_eth';
 
 interface Props {
@@ -22,6 +23,7 @@ enum FormType {
     CANCEL = 'Cancel',
     WRAP_ETH = 'Wrap ETH',
     GET_ORDER_INFO = 'Order Info',
+    TX_EXPLAINER = 'Tx Explainer',
 }
 interface ZeroExActionsState {
     selectedForm: FormType;
@@ -64,6 +66,9 @@ export class ZeroExActions extends React.Component<Props, ZeroExActionsState> {
                 break;
             case FormType.GET_ORDER_INFO:
                 currentFormRender = <GetOrderInfo {...defaultProps} />;
+                break;
+            case FormType.TX_EXPLAINER:
+                currentFormRender = <TxExplainer {...defaultProps} />;
                 break;
             default:
                 currentFormRender = <div />;

@@ -1,4 +1,5 @@
-import { ContractWrappers, MetamaskSubprovider } from '0x.js';
+import { ContractWrappers, MetamaskSubprovider, RPCSubprovider, Web3ProviderEngine } from '0x.js';
+import { SignerSubprovider } from '@0x/subproviders';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Content, Footer } from 'bloomer';
 import * as _ from 'lodash';
@@ -18,6 +19,12 @@ interface AppState {
     contractWrappers?: ContractWrappers;
     web3?: any;
 }
+
+const networkToRPCURI = {
+    1: 'https://mainnet.infura.io',
+    3: 'https://ropsten.infura.io',
+    42: 'https://kovan.infura.io',
+};
 
 export class MainApp extends React.Component<{}, AppState> {
     constructor(props: {}) {
@@ -61,12 +68,17 @@ export class MainApp extends React.Component<{}, AppState> {
         if (web3) {
             // Wrap Metamask in a compatibility wrapper as some of the behaviour
             // differs
-            const provider = (web3.currentProvider as any).isMetaMask
+            const signerProvider = (web3.currentProvider as any).isMetaMask
                 ? new MetamaskSubprovider(web3.currentProvider)
-                : web3.currentProvider;
-            const web3Wrapper = new Web3Wrapper(provider);
+                : new SignerSubprovider(web3.currentProvider);
+            let web3Wrapper = new Web3Wrapper(web3.currentProvider);
             const networkId = await web3Wrapper.getNetworkIdAsync();
-            const contractWrappers = new ContractWrappers(provider, { networkId });
+            const providerEngine = new Web3ProviderEngine({ pollingInterval: 15000 });
+            providerEngine.addProvider(signerProvider);
+            providerEngine.addProvider(new RPCSubprovider(networkToRPCURI[networkId]));
+            providerEngine.start();
+            const contractWrappers = new ContractWrappers(providerEngine, { networkId });
+            web3Wrapper = new Web3Wrapper(providerEngine);
             // Load all of the ABI's into the ABI decoder so logs are decoded
             // and human readable
             _.map(

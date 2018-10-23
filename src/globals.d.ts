@@ -5,6 +5,7 @@ declare module '*.json' {
 
 declare module 'react-toast-notifications';
 declare module 'ethereumjs-abi';
+declare module 'web3-provider-engine/subproviders/cache';
 
 interface Token {
     name: string;
