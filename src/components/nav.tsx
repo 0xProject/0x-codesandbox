@@ -12,11 +12,13 @@ enum Network {
     Mainnet = 'Mainnet',
     Ropsten = 'Ropsten',
     Kovan = 'Kovan',
+    Rinkeby = 'Rinkeby',
     Unknown = 'Unknown',
 }
 const networkIdToNetwork = {
     1: Network.Mainnet,
     3: Network.Ropsten,
+    4: Network.Rinkeby,
     42: Network.Kovan,
     50: Network.Unknown,
 };

@@ -13,3 +13,10 @@ export function parseJSONSignedOrder(order: string): SignedOrder {
 export const NULL_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 export const ZERO = new BigNumber(0);
+export const networkToRPCURI = {
+    1: 'https://mainnet.infura.io',
+    3: 'https://ropsten.infura.io',
+    4: 'https://rinkeby.infura.io',
+    42: 'https://kovan.infura.io',
+    50: 'http://localhost:8545',
+};
