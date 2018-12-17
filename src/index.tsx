@@ -59,15 +59,31 @@ export class MainApp extends React.Component<{}, AppState> {
         );
     }
     private async _initializeWeb3Async(): Promise<void> {
-        const web3 = (window as any).web3;
-        if (web3) {
+        let injectedProviderIfExists = (window as any).ethereum;
+        if (!_.isUndefined(injectedProviderIfExists)) {
+            if (!_.isUndefined(injectedProviderIfExists.enable)) {
+                try {
+                    await injectedProviderIfExists.enable();
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+        } else {
+            const injectedWeb3IfExists = (window as any).web3;
+            if (!_.isUndefined(injectedWeb3IfExists) && !_.isUndefined(injectedWeb3IfExists.currentProvider)) {
+                injectedProviderIfExists = injectedWeb3IfExists.currentProvider;
+            } else {
+                return undefined;
+            }
+        }
+        if (injectedProviderIfExists) {
             // Wrap Metamask in a compatibility wrapper as some of the behaviour
             // differs
-            const networkId = await new Web3Wrapper(web3.currentProvider).getNetworkIdAsync();
+            const networkId = await new Web3Wrapper(injectedProviderIfExists).getNetworkIdAsync();
             const signerProvider =
-                (web3.currentProvider as any).isMetaMask || (web3.currentProvider as any).isToshi
-                    ? new MetamaskSubprovider(web3.currentProvider)
-                    : new SignerSubprovider(web3.currentProvider);
+                injectedProviderIfExists.isMetaMask || injectedProviderIfExists.isToshi
+                    ? new MetamaskSubprovider(injectedProviderIfExists)
+                    : new SignerSubprovider(injectedProviderIfExists);
             const provider = new Web3ProviderEngine();
             provider.addProvider(signerProvider);
             provider.addProvider(new RPCSubprovider(networkToRPCURI[networkId]));
@@ -85,7 +101,7 @@ export class MainApp extends React.Component<{}, AppState> {
                 ],
                 abi => web3Wrapper.abiDecoder.addABI(abi),
             );
-            this.setState({ web3Wrapper, contractWrappers, web3 });
+            this.setState({ web3Wrapper, contractWrappers, web3: injectedProviderIfExists });
         }
     }
 }

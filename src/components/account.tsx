@@ -42,7 +42,6 @@ export class Account extends React.Component<Props, AccountState> {
         }
         const networkId = await web3Wrapper.getNetworkIdAsync();
         const tokens = TOKENS_BY_NETWORK[networkId];
-        console.log(tokens);
         // Fetch all the Balances for all of the tokens
         const allBalancesAsync = _.map(
             tokens,
@@ -50,7 +49,6 @@ export class Account extends React.Component<Props, AccountState> {
                 if (!token.address) {
                     return undefined;
                 }
-                console.log('balance');
                 try {
                     const balance = await erc20TokenWrapper.getBalanceAsync(token.address, address);
                     const allowance = await erc20TokenWrapper.getProxyAllowanceAsync(token.address, address);
