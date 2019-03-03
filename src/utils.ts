@@ -1,4 +1,5 @@
-import { BigNumber, SignedOrder } from '0x.js';
+import { SignedOrder } from '@0x/types';
+import { BigNumber } from '@0x/utils';
 
 export function parseJSONSignedOrder(order: string): SignedOrder {
     const signedOrder = JSON.parse(order);

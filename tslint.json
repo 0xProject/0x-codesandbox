@@ -9,6 +9,7 @@
         "custom-no-magic-numbers": false,
         "no-console": false,
         "no-unnecessary-type-assertion": false,
+        "unnecessary-bind": false,
         "jsx-no-lambda": false
     }
 }

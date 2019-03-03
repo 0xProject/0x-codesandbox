@@ -1,13 +1,6 @@
-import {
-    assetDataUtils,
-    BigNumber,
-    ContractWrappers,
-    generatePseudoRandomSalt,
-    Order,
-    orderHashUtils,
-    signatureUtils,
-    SignedOrder,
-} from '0x.js';
+import { ContractWrappers, Order, SignedOrder } from '@0x/contract-wrappers';
+import { assetDataUtils, generatePseudoRandomSalt, orderHashUtils, signatureUtils } from '@0x/order-utils';
+import { BigNumber } from '@0x/utils';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Button, Control, Field, Input, PanelBlock, Select, TextArea } from 'bloomer';
 import * as _ from 'lodash';
@@ -34,8 +27,8 @@ interface CreateOrderState {
 }
 
 enum TraderSide {
-    MAKER,
-    TAKER,
+    Maker,
+    Taker,
 }
 
 export class CreateOrder extends React.Component<Props, CreateOrderState> {
@@ -115,9 +108,9 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
         const makerTokenRender = (
             <PanelBlockField label="Maker Token">
                 <Field hasAddons={true}>
-                    <Control>{this.buildTokenSelector(TraderSide.MAKER)}</Control>
+                    <Control>{this.buildTokenSelector(TraderSide.Maker)}</Control>
                     <Input
-                        onChange={(e: any) => this.orderTokenAmountChanged(e.target.value, TraderSide.MAKER)}
+                        onChange={(e: any) => this.orderTokenAmountChanged(e.target.value, TraderSide.Maker)}
                         value={this.state.makerAmount}
                         type="text"
                         placeholder="Amount"
@@ -128,10 +121,10 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
         const takerTokenRender = (
             <PanelBlockField label="Taker Token">
                 <Field hasAddons={true}>
-                    <Control>{this.buildTokenSelector(TraderSide.TAKER)}</Control>
+                    <Control>{this.buildTokenSelector(TraderSide.Taker)}</Control>
                     <Control isExpanded={true}>
                         <Input
-                            onChange={(e: any) => this.orderTokenAmountChanged(e.target.value, TraderSide.TAKER)}
+                            onChange={(e: any) => this.orderTokenAmountChanged(e.target.value, TraderSide.Taker)}
                             value={this.state.takerAmount}
                             type="text"
                             placeholder="Amount"
@@ -164,20 +157,20 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
     }
     public orderTokenSelected = (symbol: string, traderSide: TraderSide) => {
         this.setState(prevState => {
-            return traderSide === TraderSide.MAKER
+            return traderSide === TraderSide.Maker
                 ? { ...prevState, makerTokenSymbol: symbol }
                 : { ...prevState, takerTokenSymbol: symbol };
         });
     }
     public orderTokenAmountChanged = (amount: string, traderSide: TraderSide) => {
         this.setState(prevState => {
-            return traderSide === TraderSide.MAKER
+            return traderSide === TraderSide.Maker
                 ? { ...prevState, makerAmount: amount }
                 : { ...prevState, takerAmount: amount };
         });
     }
     public buildTokenSelector = (traderSide: TraderSide) => {
-        const selected = traderSide === TraderSide.MAKER ? this.state.makerTokenSymbol : this.state.takerTokenSymbol;
+        const selected = traderSide === TraderSide.Maker ? this.state.makerTokenSymbol : this.state.takerTokenSymbol;
         return (
             <Select onChange={(e: any) => this.orderTokenSelected(e.target.value, traderSide)} value={selected}>
                 {_.map(Object.keys(TOKENS), tokenSymbol => {

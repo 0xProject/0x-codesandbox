@@ -1,4 +1,5 @@
-import { ContractWrappers, orderHashUtils, OrderStatus } from '0x.js';
+import { ContractWrappers, OrderStatus } from '@0x/contract-wrappers';
+import { orderHashUtils } from '@0x/order-utils';
 import { Button, PanelBlock, TextArea } from 'bloomer';
 import * as React from 'react';
 
@@ -24,7 +25,7 @@ export class CancelOrder extends React.Component<Props, CancelOrderState> {
             const signedOrder = parseJSONSignedOrder(orderJSON);
             // Retrieve the order info, only cancel fillable orders
             const orderInfo = await contractWrappers.exchange.getOrderInfoAsync(signedOrder);
-            if (orderInfo.orderStatus === OrderStatus.FILLABLE) {
+            if (orderInfo.orderStatus === OrderStatus.Fillable) {
                 // Call Cancel Order on the Exchange contract
                 const txHash = await contractWrappers.exchange.cancelOrderAsync(signedOrder);
                 if (txHash) {
