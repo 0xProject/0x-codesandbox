@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@0x/abi-gen-wrappers@^4.0.1", "@0x/abi-gen-wrappers@^4.0.2":
+"@0x/abi-gen-wrappers@^4.0.2":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@0x/abi-gen-wrappers/-/abi-gen-wrappers-4.0.2.tgz#0a2f05d84335bc4d3a9d2043be971090ee85e114"
   dependencies:
@@ -39,7 +39,7 @@
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@0x/contract-artifacts/-/contract-artifacts-1.3.0.tgz#74320b68206e2754318568c14593c6a28e853675"
 
-"@0x/contract-wrappers@^8.0.2":
+"@0x/contract-wrappers@^8.0.3":
   version "8.0.3"
   resolved "https://registry.yarnpkg.com/@0x/contract-wrappers/-/contract-wrappers-8.0.3.tgz#47456db51d7aa4b83c288ac9d6bd8820b65afe24"
   dependencies:
@@ -71,7 +71,7 @@
     jsonschema "^1.2.0"
     lodash.values "^4.3.0"
 
-"@0x/order-utils@^7.0.1", "@0x/order-utils@^7.0.2":
+"@0x/order-utils@^7.0.2":
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/@0x/order-utils/-/order-utils-7.0.2.tgz#fd6143a8cc394de168afeffb6994d5700c2f0a1d"
   dependencies:
@@ -93,7 +93,7 @@
     ethers "~4.0.4"
     lodash "^4.17.11"
 
-"@0x/subproviders@^4.0.1":
+"@0x/subproviders@^4.0.2":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@0x/subproviders/-/subproviders-4.0.2.tgz#aa33a120743c520ef8a59ac4c15cc38b82b92016"
   dependencies:
@@ -150,7 +150,7 @@
     ethereum-types "^2.1.0"
     popper.js "1.14.3"
 
-"@0x/utils@^4.2.1", "@0x/utils@^4.2.2":
+"@0x/utils@^4.2.2":
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@0x/utils/-/utils-4.2.2.tgz#d37777332be999e26011a1128e70900815578b70"
   dependencies:
@@ -168,7 +168,7 @@
     js-sha3 "^0.7.0"
     lodash "^4.17.11"
 
-"@0x/web3-wrapper@^6.0.1", "@0x/web3-wrapper@^6.0.2":
+"@0x/web3-wrapper@^6.0.2":
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/@0x/web3-wrapper/-/web3-wrapper-6.0.2.tgz#cdf6c5cf42c9593a1e3430030e14457b01a56eb2"
   dependencies:
@@ -343,9 +343,9 @@
   version "10.9.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.9.4.tgz#0f4cb2dc7c1de6096055357f70179043c33e9897"
 
-"@types/node@11.9.6":
-  version "11.9.6"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.9.6.tgz#c632bbcc780a1349673a6e2e9b9dfa8c369d3c74"
+"@types/node@11.10.4":
+  version "11.10.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-11.10.4.tgz#3f5fc4f0f322805f009e00ab35a2ff3d6b778e42"
 
 "@types/node@^10.3.2":
   version "10.14.1"
@@ -3546,20 +3546,6 @@ ethereumjs-vm@^2.1.0, ethereumjs-vm@^2.3.4, ethereumjs-vm@^2.6.0:
     rustbn.js "~0.2.0"
     safe-buffer "^5.1.1"
 
-ethereumjs-wallet@*:
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/ethereumjs-wallet/-/ethereumjs-wallet-0.6.3.tgz#b0eae6f327637c2aeb9ccb9047b982ac542e6ab1"
-  dependencies:
-    aes-js "^3.1.1"
-    bs58check "^2.1.2"
-    ethereumjs-util "^6.0.0"
-    hdkey "^1.1.0"
-    randombytes "^2.0.6"
-    safe-buffer "^5.1.2"
-    scrypt.js "^0.3.0"
-    utf8 "^3.0.0"
-    uuid "^3.3.2"
-
 ethereumjs-wallet@0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/ethereumjs-wallet/-/ethereumjs-wallet-0.6.2.tgz#67244b6af3e8113b53d709124b25477b64aeccda"
@@ -4139,7 +4125,7 @@ functional-red-black-tree@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
 
-ganache-core@*, ganache-core@^2.3.3:
+ganache-core@^2.3.3:
   version "2.5.3"
   resolved "https://registry.yarnpkg.com/ganache-core/-/ganache-core-2.5.3.tgz#8c6f21d820a694826082dfbb2dc59f834a6874fc"
   dependencies:
@@ -4487,7 +4473,7 @@ hdkey@^0.7.1:
     coinstring "^2.0.0"
     secp256k1 "^3.0.1"
 
-hdkey@^1.0.0, hdkey@^1.1.0:
+hdkey@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/hdkey/-/hdkey-1.1.1.tgz#c2b3bfd5883ff9529b72f2f08b28be0972a9f64a"
   dependencies:
@@ -6705,12 +6691,6 @@ object.pick@^1.3.0:
   dependencies:
     isobject "^3.0.1"
 
-oboe@*:
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/oboe/-/oboe-2.1.4.tgz#20c88cdb0c15371bb04119257d4fdd34b0aa49f6"
-  dependencies:
-    http-https "^1.0.0"
-
 oboe@2.1.3:
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/oboe/-/oboe-2.1.3.tgz#2b4865dbd46be81225713f4e9bfe4bcf4f680a4f"
@@ -7603,7 +7583,7 @@ randomatic@^3.0.0:
     kind-of "^6.0.0"
     math-random "^1.0.1"
 
-randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5, randombytes@^2.0.6:
+randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.1.0.tgz#df6f84372f0270dc65cdf6291349ab7a473d4f2a"
   dependencies:
@@ -8215,15 +8195,7 @@ scrypt.js@^0.2.0:
     scrypt "^6.0.2"
     scryptsy "^1.2.1"
 
-scrypt.js@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/scrypt.js/-/scrypt.js-0.3.0.tgz#6c62d61728ad533c8c376a2e5e3e86d41a95c4c0"
-  dependencies:
-    scryptsy "^1.2.1"
-  optionalDependencies:
-    scrypt "^6.0.2"
-
-scrypt@*, scrypt@^6.0.2:
+scrypt@^6.0.2:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/scrypt/-/scrypt-6.0.3.tgz#04e014a5682b53fa50c2d5cce167d719c06d870d"
   dependencies:
@@ -9205,7 +9177,7 @@ tslint@5.11.0:
     tslib "^1.8.0"
     tsutils "^2.27.2"
 
-tslint@^5.13.0, tslint@^5.7.0:
+tslint@^5.13.1, tslint@^5.7.0:
   version "5.14.0"
   resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.14.0.tgz#be62637135ac244fc9b37ed6ea5252c9eba1616e"
   dependencies:
@@ -9557,7 +9529,7 @@ uuid@3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.2.1.tgz#12c528bb9d58d0b9265d9a2f6f0fe8be17ff1f14"
 
-uuid@^3.0.1, uuid@^3.3.2:
+uuid@^3.0.1, uuid@^3.1.0, uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
 
