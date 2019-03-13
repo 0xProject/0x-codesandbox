@@ -21,3 +21,11 @@ interface TokenBalanceAllowance {
     balance: BigNumber;
     allowance: BigNumber;
 }
+
+declare global {
+    interface Window {
+        ZeroEx: any;
+    }
+}
+
+window.ZeroEx = window.ZeroEx || {};

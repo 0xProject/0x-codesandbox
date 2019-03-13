@@ -2,6 +2,10 @@
     "compilerOptions": {
         "outDir": "build/dist",
         "typeRoots": ["node_modules/@0x/typescript-typings/types", "node_modules/@types"],
+        "baseUrl": "./",
+        "paths": {
+            "*": ["node_modules/@0x/types/*"]
+        },
         "module": "esnext",
         "target": "es5",
         "lib": ["es6", "dom"],
@@ -19,5 +23,5 @@
         "esModuleInterop": true,
         "noUnusedLocals": true
     },
-    "exclude": ["node_modules", "build", "scripts"]
+    "exclude": ["node_modules", "build", "scripts", "public"]
 }

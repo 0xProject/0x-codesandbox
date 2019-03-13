@@ -1,5 +1,5 @@
 import { ContractWrappers } from '@0x/contract-wrappers';
-import { MetamaskSubprovider, RPCSubprovider, SignerSubprovider, Web3ProviderEngine } from '@0x/subproviders';
+// import { MetamaskSubprovider, RPCSubprovider, SignerSubprovider, Web3ProviderEngine } from '@0x/subproviders';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Content, Footer } from 'bloomer';
 import * as _ from 'lodash';
@@ -80,16 +80,13 @@ export class MainApp extends React.Component<{}, AppState> {
             // Wrap Metamask in a compatibility wrapper as some of the behaviour
             // differs
             const networkId = await new Web3Wrapper(injectedProviderIfExists).getNetworkIdAsync();
-            const signerProvider =
-                injectedProviderIfExists.isMetaMask || injectedProviderIfExists.isToshi
-                    ? new MetamaskSubprovider(injectedProviderIfExists)
-                    : new SignerSubprovider(injectedProviderIfExists);
-            const provider = new Web3ProviderEngine();
+            const signerProvider = new (window as any).ZeroEx.MetamaskSubprovider(injectedProviderIfExists);
+            const provider = new (window as any).ZeroEx.Web3ProviderEngine();
             provider.addProvider(signerProvider);
-            provider.addProvider(new RPCSubprovider(networkToRPCURI[networkId]));
+            provider.addProvider(new (window as any).ZeroEx.RPCSubprovider(networkToRPCURI[networkId]));
             provider.start();
             const web3Wrapper = new Web3Wrapper(provider);
-            const contractWrappers = new ContractWrappers(provider, { networkId });
+            const contractWrappers = new (window as any).ZeroEx.ContractWrappers(provider, { networkId });
             // Load all of the ABI's into the ABI decoder so logs are decoded
             // and human readable
             _.map(
