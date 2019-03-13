@@ -8,7 +8,6 @@
     "main": "src/index.tsx",
     "dependencies": {
         "@0x/abi-gen-wrappers": "^4.0.2",
-        "@0x/contract-wrappers": "^8.0.3",
         "@0x/order-utils": "^7.0.2",
         "@0x/utils": "^4.2.2",
         "@0x/web3-wrapper": "^6.0.2",

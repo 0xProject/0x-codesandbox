@@ -1,4 +1,3 @@
-import { ContractWrappers, OrderInfo, OrderStatus } from '@0x/contract-wrappers';
 import { orderHashUtils } from '@0x/order-utils';
 import { Button, Input, PanelBlock, TextArea } from 'bloomer';
 import * as React from 'react';

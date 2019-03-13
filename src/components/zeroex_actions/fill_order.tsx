@@ -1,4 +1,4 @@
-import { ContractWrappers, SignedOrder } from '@0x/contract-wrappers';
+import { SignedOrder } from '@0x/types';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Button, PanelBlock, TextArea } from 'bloomer';
 import * as React from 'react';

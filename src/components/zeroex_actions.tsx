@@ -1,4 +1,3 @@
-import { ContractWrappers } from '@0x/contract-wrappers';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Column, Columns, Content, Panel, PanelTabs, Subtitle } from 'bloomer';
 import * as _ from 'lodash';
@@ -11,7 +10,7 @@ import { GetOrderInfo } from './zeroex_actions/order_info';
 import { WrapEth } from './zeroex_actions/wrap_eth';
 
 interface Props {
-    contractWrappers: ContractWrappers;
+    contractWrappers: any;
     web3Wrapper: Web3Wrapper;
     toastManager: { add: (msg: string, appearance: {}) => void };
 }

@@ -6,6 +6,24 @@ declare module '*.json' {
 declare module 'react-toast-notifications';
 declare module 'ethereumjs-abi';
 
+type ContractWrappers = any;
+
+interface OrderInfo {
+    orderStatus: number;
+    orderHash: string;
+    orderTakerAssetFilledAmount: BigNumber;
+}
+
+enum OrderStatus {
+    Invalid,
+    InvalidMakerAssetAmount,
+    InvalidTakerAssetAmount,
+    Fillable,
+    Expired,
+    FullyFilled,
+    Cancelled,
+}
+
 interface Token {
     name: string;
     address: string;
