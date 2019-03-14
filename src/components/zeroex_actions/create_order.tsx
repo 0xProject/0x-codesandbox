@@ -1,6 +1,13 @@
-import { ContractWrappers, Order, SignedOrder } from '@0x/contract-wrappers';
-import { assetDataUtils, generatePseudoRandomSalt, orderHashUtils, signatureUtils } from '@0x/order-utils';
-import { BigNumber } from '@0x/utils';
+import {
+    assetDataUtils,
+    BigNumber,
+    ContractWrappers,
+    generatePseudoRandomSalt,
+    Order,
+    orderHashUtils,
+    signatureUtils,
+    SignedOrder,
+} from '0x.js';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Button, Control, Field, Input, PanelBlock, Select, TextArea } from 'bloomer';
 import * as _ from 'lodash';

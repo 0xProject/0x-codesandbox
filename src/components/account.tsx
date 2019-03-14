@@ -1,7 +1,6 @@
+import { BigNumber, ERC20TokenWrapper } from '0x.js';
 import { DummyERC20TokenContract } from '@0x/abi-gen-wrappers';
 import { DummyERC20Token } from '@0x/contract-artifacts';
-import { ERC20TokenWrapper } from '@0x/contract-wrappers';
-import { BigNumber } from '@0x/utils';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Button, Content, Icon, Subtitle, Table, Tag } from 'bloomer';
 import * as _ from 'lodash';
