@@ -1,5 +1,4 @@
-import { ContractWrappers } from '@0x/contract-wrappers';
-import { MetamaskSubprovider, RPCSubprovider, SignerSubprovider, Web3ProviderEngine } from '@0x/subproviders';
+import { ContractWrappers, MetamaskSubprovider, RPCSubprovider, Web3ProviderEngine } from '0x.js';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Content, Footer } from 'bloomer';
 import * as _ from 'lodash';

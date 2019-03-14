@@ -2,6 +2,26 @@
 # yarn lockfile v1
 
 
+"0x.js@^6.0.3":
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/0x.js/-/0x.js-6.0.3.tgz#683b23e594a95ff36b0e32ed8850a1015a317778"
+  dependencies:
+    "@0x/assert" "^2.0.6"
+    "@0x/base-contract" "^5.0.2"
+    "@0x/contract-wrappers" "^8.0.3"
+    "@0x/order-utils" "^7.0.2"
+    "@0x/order-watcher" "^4.0.3"
+    "@0x/subproviders" "^4.0.2"
+    "@0x/types" "^2.1.1"
+    "@0x/typescript-typings" "^4.1.0"
+    "@0x/utils" "^4.2.2"
+    "@0x/web3-wrapper" "^6.0.2"
+    "@types/web3-provider-engine" "^14.0.0"
+    ethereum-types "^2.1.0"
+    ethers "~4.0.4"
+    lodash "^4.17.11"
+    web3-provider-engine "14.0.6"
+
 "@0x/abi-gen-wrappers@^4.0.2":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@0x/abi-gen-wrappers/-/abi-gen-wrappers-4.0.2.tgz#0a2f05d84335bc4d3a9d2043be971090ee85e114"
@@ -62,6 +82,22 @@
     lodash "^4.17.11"
     uuid "^3.3.2"
 
+"@0x/fill-scenarios@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@0x/fill-scenarios/-/fill-scenarios-3.0.2.tgz#3a1ac619e8a15da2435230b0d9ab9123d35b3d93"
+  dependencies:
+    "@0x/abi-gen-wrappers" "^4.0.2"
+    "@0x/base-contract" "^5.0.2"
+    "@0x/contract-artifacts" "^1.3.0"
+    "@0x/order-utils" "^7.0.2"
+    "@0x/types" "^2.1.1"
+    "@0x/typescript-typings" "^4.1.0"
+    "@0x/utils" "^4.2.2"
+    "@0x/web3-wrapper" "^6.0.2"
+    ethereum-types "^2.1.0"
+    ethers "~4.0.4"
+    lodash "^4.17.11"
+
 "@0x/json-schemas@^3.0.6":
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/@0x/json-schemas/-/json-schemas-3.0.6.tgz#f372bc81a587ab8db902225e69a497707030cac0"
@@ -92,6 +128,30 @@
     ethereumjs-util "^5.1.1"
     ethers "~4.0.4"
     lodash "^4.17.11"
+
+"@0x/order-watcher@^4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@0x/order-watcher/-/order-watcher-4.0.3.tgz#012ac7f6e39d990434515b145ca74f2ad3ea0620"
+  dependencies:
+    "@0x/abi-gen-wrappers" "^4.0.2"
+    "@0x/assert" "^2.0.6"
+    "@0x/base-contract" "^5.0.2"
+    "@0x/contract-addresses" "^2.2.2"
+    "@0x/contract-artifacts" "^1.3.0"
+    "@0x/contract-wrappers" "^8.0.3"
+    "@0x/fill-scenarios" "^3.0.2"
+    "@0x/json-schemas" "^3.0.6"
+    "@0x/order-utils" "^7.0.2"
+    "@0x/types" "^2.1.1"
+    "@0x/typescript-typings" "^4.1.0"
+    "@0x/utils" "^4.2.2"
+    "@0x/web3-wrapper" "^6.0.2"
+    bintrees "^1.0.2"
+    ethereum-types "^2.1.0"
+    ethereumjs-blockstream "6.0.0"
+    ethers "~4.0.4"
+    lodash "^4.17.11"
+    websocket "^1.0.25"
 
 "@0x/subproviders@^4.0.2":
   version "4.0.2"
@@ -1537,6 +1597,10 @@ bindings@^1.2.1, bindings@^1.4.0:
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
   dependencies:
     file-uri-to-path "1.0.0"
+
+bintrees@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/bintrees/-/bintrees-1.0.2.tgz#49f896d6e858a4a499df85c38fb399b9aff840f8"
 
 bip39@2.5.0, bip39@^2.5.0:
   version "2.5.0"
@@ -6381,7 +6445,7 @@ nan@2.10.0:
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.10.0.tgz#96d0cd610ebd58d4b4de9cc0c6828cda99c7548f"
 
-nan@^2.0.8, nan@^2.12.1, nan@^2.2.1, nan@^2.3.3, nan@^2.8.0, nan@^2.9.2:
+nan@^2.0.8, nan@^2.11.0, nan@^2.12.1, nan@^2.2.1, nan@^2.3.3, nan@^2.8.0, nan@^2.9.2:
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.13.0.tgz#7bdfc27dd3c060c46e60b62c72b74012d1a4cd68"
 
@@ -9244,7 +9308,7 @@ type-is@~1.6.16:
     media-typer "0.3.0"
     mime-types "~2.1.18"
 
-typedarray-to-buffer@^3.1.2:
+typedarray-to-buffer@^3.1.2, typedarray-to-buffer@^3.1.5:
   version "3.1.5"
   resolved "https://registry.yarnpkg.com/typedarray-to-buffer/-/typedarray-to-buffer-3.1.5.tgz#a97ee7a9ff42691b9f783ff1bc5112fe3fca9080"
   dependencies:
@@ -9961,6 +10025,15 @@ websocket@1.0.26:
     debug "^2.2.0"
     nan "^2.3.3"
     typedarray-to-buffer "^3.1.2"
+    yaeti "^0.0.6"
+
+websocket@^1.0.25:
+  version "1.0.28"
+  resolved "https://registry.yarnpkg.com/websocket/-/websocket-1.0.28.tgz#9e5f6fdc8a3fe01d4422647ef93abdd8d45a78d3"
+  dependencies:
+    debug "^2.2.0"
+    nan "^2.11.0"
+    typedarray-to-buffer "^3.1.5"
     yaeti "^0.0.6"
 
 "websocket@git://github.com/frozeman/WebSocket-Node.git#browserifyCompatible":

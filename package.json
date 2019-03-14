@@ -7,6 +7,7 @@
     "license": "Apache-2.0",
     "main": "src/index.tsx",
     "dependencies": {
+        "0x.js": "^6.0.3",
         "@0x/abi-gen-wrappers": "^4.0.2",
         "@0x/contract-wrappers": "^8.0.3",
         "@0x/order-utils": "^7.0.2",
