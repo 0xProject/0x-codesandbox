@@ -1,5 +1,4 @@
-import { ContractWrappers } from '@0x/contract-wrappers';
-import { BigNumber } from '@0x/utils';
+import { BigNumber, ContractWrappers } from '0x.js';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Button, Control, Field, Input, PanelBlock } from 'bloomer';
 import * as React from 'react';
