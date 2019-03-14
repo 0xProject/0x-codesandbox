@@ -1,6 +1,7 @@
-import { BigNumber, ERC20TokenWrapper } from '0x.js';
 import { DummyERC20TokenContract } from '@0x/abi-gen-wrappers';
 import { DummyERC20Token } from '@0x/contract-artifacts';
+import { ERC20TokenWrapper } from '@0x/contract-wrappers';
+import { BigNumber } from '@0x/utils';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Button, Content, Icon, Subtitle, Table, Tag } from 'bloomer';
 import * as _ from 'lodash';
@@ -206,7 +207,7 @@ export class Account extends React.Component<Props, AccountState> {
     public renderAllowanceForTokenBalance(tokenBalance: TokenBalanceAllowance): React.ReactNode {
         let allowanceRender;
         if (tokenBalance.token.isTradeable) {
-            allowanceRender = tokenBalance.allowance.greaterThan(0) ? (
+            allowanceRender = tokenBalance.allowance.isGreaterThan(0) ? (
                 <Icon isSize="small" className="fa fa-check-circle" style={{ color: GREEN }} />
             ) : (
                 <a href="#" onClick={() => void this.setProxyAllowanceAsync(tokenBalance.token.address)}>

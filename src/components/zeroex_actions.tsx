@@ -1,4 +1,4 @@
-import { ContractWrappers } from '0x.js';
+import { ContractWrappers } from '@0x/contract-wrappers';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Column, Columns, Content, Panel, PanelTabs, Subtitle } from 'bloomer';
 import * as _ from 'lodash';
@@ -17,18 +17,18 @@ interface Props {
 }
 
 enum FormType {
-    CREATE = 'Create',
-    FILL = 'Fill',
-    CANCEL = 'Cancel',
-    WRAP_ETH = 'Wrap ETH',
-    GET_ORDER_INFO = 'Order Info',
+    Create = 'Create',
+    Fill = 'Fill',
+    Cancel = 'Cancel',
+    WrapEth = 'Wrap ETH',
+    GetOrderInfo = 'Order Info',
 }
 interface ZeroExActionsState {
     selectedForm: FormType;
 }
 
 export class ZeroExActions extends React.Component<Props, ZeroExActionsState> {
-    public state = { selectedForm: FormType.CREATE };
+    public state = { selectedForm: FormType.Create };
     public onTxSubmitted = async (txHash: string) => {
         const { toastManager, web3Wrapper } = this.props;
         if (txHash) {
@@ -50,19 +50,19 @@ export class ZeroExActions extends React.Component<Props, ZeroExActionsState> {
         const defaultProps = { web3Wrapper, contractWrappers, onTxSubmitted: this.onTxSubmitted };
         let currentFormRender;
         switch (selectedForm) {
-            case FormType.CREATE:
+            case FormType.Create:
                 currentFormRender = <CreateOrder {...defaultProps} />;
                 break;
-            case FormType.CANCEL:
+            case FormType.Cancel:
                 currentFormRender = <CancelOrder {...defaultProps} />;
                 break;
-            case FormType.FILL:
+            case FormType.Fill:
                 currentFormRender = <FillOrder {...defaultProps} />;
                 break;
-            case FormType.WRAP_ETH:
+            case FormType.WrapEth:
                 currentFormRender = <WrapEth {...defaultProps} />;
                 break;
-            case FormType.GET_ORDER_INFO:
+            case FormType.GetOrderInfo:
                 currentFormRender = <GetOrderInfo {...defaultProps} />;
                 break;
             default:
