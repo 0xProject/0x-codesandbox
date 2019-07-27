@@ -102,11 +102,7 @@ export class Account extends React.Component<Props, AccountState> {
     }
     public async mintTokenAsync(tokenBalance: TokenBalanceAllowance) {
         const { selectedAccount } = this.state;
-        const token = new DummyERC20TokenContract(
-            (DummyERC20Token as any).compilerOutput.abi,
-            tokenBalance.token.address,
-            this.props.web3Wrapper.getProvider(),
-        );
+        const token = new DummyERC20TokenContract(tokenBalance.token.address, this.props.web3Wrapper.getProvider());
         const maxAmount = await token.MAX_MINT_AMOUNT.callAsync();
         const balanceDiffToMaxAmount = maxAmount.minus(tokenBalance.balance);
         const amountToMint = BigNumber.min(maxAmount, balanceDiffToMaxAmount);
