@@ -25,7 +25,12 @@ export class FillOrder extends React.Component<Props, FillOrderState> {
         const takerAddress = addresses[0];
         const takerFillAmount = signedOrder.takerAssetAmount;
         // Call fillOrder on the Exchange contract
-        const txHash = await contractWrappers.exchange.fillOrderAsync(signedOrder, takerFillAmount, takerAddress);
+        const txHash = await contractWrappers.exchange.fillOrder.validateAndSendTransactionAsync(
+            signedOrder,
+            takerFillAmount,
+            signedOrder.signature,
+            { from: takerAddress },
+        );
         return txHash;
     }
     public render(): React.ReactNode {

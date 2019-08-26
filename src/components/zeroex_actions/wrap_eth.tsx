@@ -24,7 +24,7 @@ export class WrapEth extends React.Component<Props, WrapEthState> {
         const { web3Wrapper, contractWrappers, onTxSubmitted } = this.props;
         const { amount } = this.state;
         // Retrieve the ether token address
-        const etherTokenAddress = contractWrappers.forwarder.etherTokenAddress;
+        const etherTokenAddress = contractWrappers.weth9.address;
         if (etherTokenAddress) {
             // List all of the available addresses
             const addresses = await web3Wrapper.getAvailableAddressesAsync();
@@ -35,8 +35,11 @@ export class WrapEth extends React.Component<Props, WrapEthState> {
             const weiAmount = Web3Wrapper.toBaseUnitAmount(ethAmount, 18);
             // Call deposit or withdraw on the ethertoken
             const txHash = wrap
-                ? await contractWrappers.etherToken.depositAsync(etherTokenAddress, weiAmount, account)
-                : await contractWrappers.etherToken.withdrawAsync(etherTokenAddress, weiAmount, account);
+                ? await contractWrappers.weth9.deposit.validateAndSendTransactionAsync({
+                      value: weiAmount,
+                      from: account,
+                  })
+                : await contractWrappers.weth9.withdraw.validateAndSendTransactionAsync(weiAmount, { from: account });
             if (txHash) {
                 onTxSubmitted(txHash);
             }

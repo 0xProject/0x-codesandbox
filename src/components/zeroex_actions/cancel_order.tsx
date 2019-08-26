@@ -23,10 +23,13 @@ export class CancelOrder extends React.Component<Props, CancelOrderState> {
             // Parse the Order JSON into types (converting into BigNumber)
             const signedOrder = parseJSONSignedOrder(orderJSON);
             // Retrieve the order info, only cancel fillable orders
-            const orderInfo = await contractWrappers.exchange.getOrderInfoAsync(signedOrder);
+            const orderInfo = await contractWrappers.exchange.getOrderInfo.callAsync(signedOrder);
             if (orderInfo.orderStatus === OrderStatus.Fillable) {
                 // Call Cancel Order on the Exchange contract
-                const txHash = await contractWrappers.exchange.cancelOrderAsync(signedOrder);
+                const txHash = await contractWrappers.exchange.cancelOrder.validateAndSendTransactionAsync(
+                    signedOrder,
+                    { from: signedOrder.makerAddress },
+                );
                 if (txHash) {
                     onTxSubmitted(txHash);
                 }

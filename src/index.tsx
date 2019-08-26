@@ -40,10 +40,7 @@ export class MainApp extends React.Component<{}, AppState> {
                         <div>
                             <Welcome />
                             <ToastProvider>
-                                <AccountWithNotifications
-                                    erc20TokenWrapper={this.state.contractWrappers.erc20Token}
-                                    web3Wrapper={this.state.web3Wrapper}
-                                />
+                                <AccountWithNotifications web3Wrapper={this.state.web3Wrapper} />
                                 <ZeroExActionsWithNotifications
                                     contractWrappers={this.state.contractWrappers}
                                     web3Wrapper={this.state.web3Wrapper}
@@ -60,8 +57,8 @@ export class MainApp extends React.Component<{}, AppState> {
     }
     private async _initializeWeb3Async(): Promise<void> {
         let injectedProviderIfExists = (window as any).ethereum;
-        if (!_.isUndefined(injectedProviderIfExists)) {
-            if (!_.isUndefined(injectedProviderIfExists.enable)) {
+        if (injectedProviderIfExists !== undefined) {
+            if (injectedProviderIfExists.enable !== undefined) {
                 try {
                     await injectedProviderIfExists.enable();
                 } catch (err) {
@@ -70,7 +67,7 @@ export class MainApp extends React.Component<{}, AppState> {
             }
         } else {
             const injectedWeb3IfExists = (window as any).web3;
-            if (!_.isUndefined(injectedWeb3IfExists) && !_.isUndefined(injectedWeb3IfExists.currentProvider)) {
+            if (injectedWeb3IfExists !== undefined && injectedWeb3IfExists.currentProvider !== undefined) {
                 injectedProviderIfExists = injectedWeb3IfExists.currentProvider;
             } else {
                 return undefined;
@@ -92,14 +89,8 @@ export class MainApp extends React.Component<{}, AppState> {
             const contractWrappers = new ContractWrappers(provider, { networkId });
             // Load all of the ABI's into the ABI decoder so logs are decoded
             // and human readable
-            _.map(
-                [
-                    contractWrappers.exchange.abi,
-                    contractWrappers.erc20Token.abi,
-                    contractWrappers.etherToken.abi,
-                    contractWrappers.forwarder.abi,
-                ],
-                abi => web3Wrapper.abiDecoder.addABI(abi),
+            _.map([contractWrappers.exchange.abi, contractWrappers.weth9.abi, contractWrappers.forwarder.abi], abi =>
+                web3Wrapper.abiDecoder.addABI(abi),
             );
             this.setState({ web3Wrapper, contractWrappers, web3: injectedProviderIfExists });
         }

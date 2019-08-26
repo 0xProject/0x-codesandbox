@@ -27,7 +27,7 @@ export class GetOrderInfo extends React.Component<Props, OrderInfoState> {
             // Generate the Order Hash for the order
             const orderHashHex = orderHashUtils.getOrderHashHex(signedOrder);
             // call getOrderInfo on the Exchange contract
-            const orderInfo = await contractWrappers.exchange.getOrderInfoAsync(signedOrder);
+            const orderInfo = await contractWrappers.exchange.getOrderInfo.callAsync(signedOrder);
             this.setState(prev => ({ ...prev, orderHash: orderHashHex, orderInfo }));
         }
     }
