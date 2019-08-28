@@ -4,7 +4,7 @@ import {
     DummyERC20TokenContract,
     ERC20TokenContract,
     getContractAddressesForNetworkOrThrow,
-} from '@0x/abi-gen-wrappers';
+} from '@0x/contract-wrappers';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Button, Content, Icon, Subtitle, Table, Tag } from 'bloomer';
 import * as _ from 'lodash';

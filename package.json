@@ -8,7 +8,6 @@
     "main": "src/index.tsx",
     "dependencies": {
         "0x.js": "^7.0.0",
-        "@0x/abi-gen-wrappers": "^5.3.0",
         "@0x/web3-wrapper": "^6.0.11",
         "bloomer": "^0.6.5",
         "bulma": "^0.7.4",
