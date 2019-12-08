@@ -1,10 +1,5 @@
-import { assetDataUtils, BigNumber } from '0x.js';
-import {
-    DevUtilsContract,
-    DummyERC20TokenContract,
-    ERC20TokenContract,
-    getContractAddressesForNetworkOrThrow,
-} from '@0x/abi-gen-wrappers';
+import { ContractWrappers, ERC20TokenContract } from '@0x/contract-wrappers';
+import { AbiEncoder, BigNumber } from '@0x/utils';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Button, Content, Icon, Subtitle, Table, Tag } from 'bloomer';
 import * as _ from 'lodash';
@@ -18,6 +13,7 @@ const GREEN = '#00d1b2';
 
 interface Props {
     web3Wrapper: Web3Wrapper;
+    contractWrappers: ContractWrappers;
     toastManager: { add: (msg: string, appearance: {}) => void };
 }
 
@@ -36,17 +32,16 @@ export class Account extends React.Component<Props, AccountState> {
         }, ACCOUNT_CHECK_INTERVAL_MS);
     }
     public async fetchAccountDetailsAsync() {
-        const { web3Wrapper } = this.props as Props;
+        const { web3Wrapper, contractWrappers } = this.props as Props;
         const { balances } = this.state;
         const addresses = await web3Wrapper.getAvailableAddressesAsync();
         const address = addresses[0];
         if (address === undefined) {
             return;
         }
-        const networkId = await web3Wrapper.getNetworkIdAsync();
-        const contractAddresses = getContractAddressesForNetworkOrThrow(networkId);
-        const tokens = TOKENS_BY_NETWORK[networkId];
-        const devUtils = new DevUtilsContract(contractAddresses.devUtils, web3Wrapper.getProvider());
+        const chainId = await web3Wrapper.getChainIdAsync();
+        const tokens = TOKENS_BY_NETWORK[chainId];
+        const devUtils = contractWrappers.devUtils;
         // Fetch all the Balances for all of the tokens
         const allBalancesAsync = _.map(
             tokens,
@@ -55,11 +50,10 @@ export class Account extends React.Component<Props, AccountState> {
                     return undefined;
                 }
                 try {
-                    const assetData = assetDataUtils.encodeERC20AssetData(token.address);
-                    const [balance, allowance] = await devUtils.getBalanceAndAssetProxyAllowance.callAsync(
-                        address,
-                        assetData,
-                    );
+                    const assetData = await devUtils.encodeERC20AssetData(token.address).callAsync();
+                    const [balance, allowance] = await devUtils
+                        .getBalanceAndAssetProxyAllowance(address, assetData)
+                        .callAsync();
                     return { token, balance, allowance };
                 } catch (e) {
                     console.log(e);
@@ -102,25 +96,47 @@ export class Account extends React.Component<Props, AccountState> {
         }
     }
     public async setProxyAllowanceAsync(tokenAddress: string) {
-        const { web3Wrapper } = this.props;
+        const { web3Wrapper, contractWrappers } = this.props;
         const { selectedAccount } = this.state;
-        const networkId = await web3Wrapper.getNetworkIdAsync();
-        const contractAddresses = getContractAddressesForNetworkOrThrow(networkId);
         const erc20Token = new ERC20TokenContract(tokenAddress, web3Wrapper.getProvider());
-        const txHash = await erc20Token.approve.validateAndSendTransactionAsync(
-            contractAddresses.erc20Proxy,
-            new BigNumber(10).pow(256).minus(1),
-            { from: selectedAccount },
-        );
+        const txHash = await erc20Token
+            .approve(contractWrappers.contractAddresses.erc20Proxy, new BigNumber(10).pow(256).minus(1))
+            .sendTransactionAsync({ from: selectedAccount });
         void this.transactionSubmittedAsync(txHash);
     }
     public async mintTokenAsync(tokenBalance: TokenBalanceAllowance) {
+        const { web3Wrapper } = this.props;
         const { selectedAccount } = this.state;
-        const token = new DummyERC20TokenContract(tokenBalance.token.address, this.props.web3Wrapper.getProvider());
-        const maxAmount = await token.MAX_MINT_AMOUNT.callAsync();
+        const mintMethod = new AbiEncoder.Method({
+            constant: false,
+            inputs: [{ internalType: 'uint256', name: '_value', type: 'uint256' }],
+            name: 'mint',
+            outputs: [],
+            payable: false,
+            stateMutability: 'nonpayable',
+            type: 'function',
+        });
+        const maxMintMethod = new AbiEncoder.Method({
+            constant: true,
+            inputs: [],
+            name: 'MAX_MINT_AMOUNT',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            payable: false,
+            stateMutability: 'view',
+            type: 'function',
+        });
+        const maxMintCallData = maxMintMethod.encode([]);
+        const maxAmount = maxMintMethod.strictDecodeReturnValue<BigNumber>(
+            await web3Wrapper.callAsync({ to: tokenBalance.token.address, data: maxMintCallData }),
+        );
         const balanceDiffToMaxAmount = maxAmount.minus(tokenBalance.balance);
         const amountToMint = BigNumber.min(maxAmount, balanceDiffToMaxAmount);
-        const txHash = await token.mint.sendTransactionAsync(amountToMint, { from: selectedAccount });
+        const mintCallData = mintMethod.encode([amountToMint]);
+        const txHash = await web3Wrapper.sendTransactionAsync({
+            to: tokenBalance.token.address,
+            data: mintCallData,
+            from: selectedAccount,
+        });
         void this.transactionSubmittedAsync(txHash);
     }
     public async transactionSubmittedAsync(txHash: string) {

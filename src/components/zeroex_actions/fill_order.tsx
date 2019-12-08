@@ -1,4 +1,5 @@
-import { ContractWrappers, SignedOrder } from '0x.js';
+import { ContractWrappers } from '@0x/contract-wrappers';
+import { SignedOrder } from '@0x/order-utils';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Button, PanelBlock, TextArea } from 'bloomer';
 import * as React from 'react';
@@ -25,12 +26,9 @@ export class FillOrder extends React.Component<Props, FillOrderState> {
         const takerAddress = addresses[0];
         const takerFillAmount = signedOrder.takerAssetAmount;
         // Call fillOrder on the Exchange contract
-        const txHash = await contractWrappers.exchange.fillOrder.validateAndSendTransactionAsync(
-            signedOrder,
-            takerFillAmount,
-            signedOrder.signature,
-            { from: takerAddress },
-        );
+        const txHash = await contractWrappers.exchange
+            .fillOrder(signedOrder, takerFillAmount, signedOrder.signature)
+            .sendTransactionAsync({ from: takerAddress });
         return txHash;
     }
     public render(): React.ReactNode {

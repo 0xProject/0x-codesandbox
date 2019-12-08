@@ -1,4 +1,5 @@
-import { ContractWrappers, orderHashUtils, OrderStatus } from '0x.js';
+import { ContractWrappers, OrderStatus } from '@0x/contract-wrappers';
+import { orderHashUtils } from '@0x/order-utils';
 import { Button, PanelBlock, TextArea } from 'bloomer';
 import * as React from 'react';
 
@@ -23,19 +24,18 @@ export class CancelOrder extends React.Component<Props, CancelOrderState> {
             // Parse the Order JSON into types (converting into BigNumber)
             const signedOrder = parseJSONSignedOrder(orderJSON);
             // Retrieve the order info, only cancel fillable orders
-            const orderInfo = await contractWrappers.exchange.getOrderInfo.callAsync(signedOrder);
+            const orderInfo = await contractWrappers.exchange.getOrderInfo(signedOrder).callAsync();
             if (orderInfo.orderStatus === OrderStatus.Fillable) {
                 // Call Cancel Order on the Exchange contract
-                const txHash = await contractWrappers.exchange.cancelOrder.validateAndSendTransactionAsync(
-                    signedOrder,
-                    { from: signedOrder.makerAddress },
-                );
+                const txHash = await contractWrappers.exchange
+                    .cancelOrder(signedOrder)
+                    .sendTransactionAsync({ from: signedOrder.makerAddress });
                 if (txHash) {
                     onTxSubmitted(txHash);
                 }
             } else {
                 // Generate the Order Hash for this order
-                const orderHashHex = orderHashUtils.getOrderHashHex(signedOrder);
+                const orderHashHex = await orderHashUtils.getOrderHashAsync(signedOrder);
                 console.log('Order already filled or cancelled: ', orderHashHex);
             }
         }

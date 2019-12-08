@@ -1,13 +1,6 @@
-import {
-    assetDataUtils,
-    BigNumber,
-    ContractWrappers,
-    generatePseudoRandomSalt,
-    Order,
-    orderHashUtils,
-    signatureUtils,
-    SignedOrder,
-} from '0x.js';
+import { ContractWrappers } from '@0x/contract-wrappers';
+import { generatePseudoRandomSalt, Order, orderHashUtils, signatureUtils, SignedOrder } from '@0x/order-utils';
+import { BigNumber } from '@0x/utils';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Button, Control, Field, Input, PanelBlock, Select, TextArea } from 'bloomer';
 import * as _ from 'lodash';
@@ -53,18 +46,18 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
         const { web3Wrapper, contractWrappers } = this.props;
         // Query the available addresses
         const addresses = await web3Wrapper.getAvailableAddressesAsync();
-        // Retrieve the network for the correct token addresses
-        const networkId = await web3Wrapper.getNetworkIdAsync();
+        // Retrieve the chain for the correct token addresses
+        const chainId = await web3Wrapper.getChainIdAsync();
         // Use the first account as the maker
         const makerAddress = addresses[0];
         // Get the Token Metadata, address, decimals
-        const tokensForNetwork = TOKENS_BY_NETWORK[networkId];
+        const tokensForNetwork = TOKENS_BY_NETWORK[chainId];
         const makerToken = tokensForNetwork[makerTokenSymbol];
         const takerToken = tokensForNetwork[takerTokenSymbol];
         // Encode the selected makerToken as assetData for 0x
-        const makerAssetData = assetDataUtils.encodeERC20AssetData(makerToken.address);
+        const makerAssetData = await contractWrappers.devUtils.encodeERC20AssetData(makerToken.address).callAsync();
         // Encode the selected takerToken as assetData for 0x
-        const takerAssetData = assetDataUtils.encodeERC20AssetData(takerToken.address);
+        const takerAssetData = await contractWrappers.devUtils.encodeERC20AssetData(takerToken.address).callAsync();
         // Amounts are in Unit amounts, 0x requires base units (as many tokens use decimals)
         const makerAssetAmount = Web3Wrapper.toBaseUnitAmount(new BigNumber(makerAmount), makerToken.decimals);
         const takerAssetAmount = Web3Wrapper.toBaseUnitAmount(new BigNumber(takerAmount), takerToken.decimals);
@@ -84,9 +77,12 @@ export class CreateOrder extends React.Component<Props, CreateOrderState> {
             makerAssetData,
             takerAssetData,
             exchangeAddress,
+            makerFeeAssetData: '0x',
+            takerFeeAssetData: '0x',
+            chainId,
         };
         // Generate the order hash for the order
-        const orderHashHex = orderHashUtils.getOrderHashHex(order);
+        const orderHashHex = await orderHashUtils.getOrderHashAsync(order);
         const provider = web3Wrapper.getProvider();
         // The maker signs the order as a proof
         try {

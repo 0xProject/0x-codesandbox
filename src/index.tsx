@@ -1,5 +1,5 @@
-import { ContractWrappers, MetamaskSubprovider, RPCSubprovider, Web3ProviderEngine } from '0x.js';
-import { SignerSubprovider } from '@0x/subproviders';
+import { ContractWrappers } from '@0x/contract-wrappers';
+import { MetamaskSubprovider, RPCSubprovider, Web3ProviderEngine } from '@0x/subproviders';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Content, Footer } from 'bloomer';
 import * as _ from 'lodash';
@@ -40,7 +40,10 @@ export class MainApp extends React.Component<{}, AppState> {
                         <div>
                             <Welcome />
                             <ToastProvider>
-                                <AccountWithNotifications web3Wrapper={this.state.web3Wrapper} />
+                                <AccountWithNotifications
+                                    web3Wrapper={this.state.web3Wrapper}
+                                    contractWrappers={this.state.contractWrappers}
+                                />
                                 <ZeroExActionsWithNotifications
                                     contractWrappers={this.state.contractWrappers}
                                     web3Wrapper={this.state.web3Wrapper}
@@ -76,22 +79,14 @@ export class MainApp extends React.Component<{}, AppState> {
         if (injectedProviderIfExists) {
             // Wrap Metamask in a compatibility wrapper as some of the behaviour
             // differs
-            const networkId = await new Web3Wrapper(injectedProviderIfExists).getNetworkIdAsync();
-            const signerProvider =
-                injectedProviderIfExists.isMetaMask || injectedProviderIfExists.isToshi
-                    ? new MetamaskSubprovider(injectedProviderIfExists)
-                    : new SignerSubprovider(injectedProviderIfExists);
+            const chainId = await new Web3Wrapper(injectedProviderIfExists).getChainIdAsync();
+            const signerProvider = new MetamaskSubprovider(injectedProviderIfExists);
             const provider = new Web3ProviderEngine();
             provider.addProvider(signerProvider);
-            provider.addProvider(new RPCSubprovider(networkToRPCURI[networkId]));
+            provider.addProvider(new RPCSubprovider(networkToRPCURI[chainId]));
             provider.start();
             const web3Wrapper = new Web3Wrapper(provider);
-            const contractWrappers = new ContractWrappers(provider, { networkId });
-            // Load all of the ABI's into the ABI decoder so logs are decoded
-            // and human readable
-            _.map([contractWrappers.exchange.abi, contractWrappers.weth9.abi, contractWrappers.forwarder.abi], abi =>
-                web3Wrapper.abiDecoder.addABI(abi),
-            );
+            const contractWrappers = new ContractWrappers(provider, { chainId });
             this.setState({ web3Wrapper, contractWrappers, web3: injectedProviderIfExists });
         }
     }
