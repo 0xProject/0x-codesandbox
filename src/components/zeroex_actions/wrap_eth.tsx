@@ -1,4 +1,5 @@
-import { BigNumber, ContractWrappers } from '0x.js';
+import { ContractWrappers } from '@0x/contract-wrappers';
+import { BigNumber } from '@0x/utils';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Button, Control, Field, Input, PanelBlock } from 'bloomer';
 import * as React from 'react';
@@ -35,11 +36,11 @@ export class WrapEth extends React.Component<Props, WrapEthState> {
             const weiAmount = Web3Wrapper.toBaseUnitAmount(ethAmount, 18);
             // Call deposit or withdraw on the ethertoken
             const txHash = wrap
-                ? await contractWrappers.weth9.deposit.validateAndSendTransactionAsync({
+                ? await contractWrappers.weth9.deposit().sendTransactionAsync({
                       value: weiAmount,
                       from: account,
                   })
-                : await contractWrappers.weth9.withdraw.validateAndSendTransactionAsync(weiAmount, { from: account });
+                : await contractWrappers.weth9.withdraw(weiAmount).sendTransactionAsync({ from: account });
             if (txHash) {
                 onTxSubmitted(txHash);
             }

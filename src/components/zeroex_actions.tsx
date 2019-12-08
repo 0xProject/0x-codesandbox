@@ -1,4 +1,4 @@
-import { ContractWrappers } from '0x.js';
+import { ContractWrappers } from '@0x/contract-wrappers';
 import { Web3Wrapper } from '@0x/web3-wrapper';
 import { Column, Columns, Content, Panel, PanelTabs, Subtitle } from 'bloomer';
 import * as _ from 'lodash';

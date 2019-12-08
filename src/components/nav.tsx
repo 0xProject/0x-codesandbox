@@ -56,7 +56,7 @@ export class Nav extends React.Component<NavProps, NavState> {
                     <NavbarItem>
                         <Image
                             isSize="16x16"
-                            src="https://0xproject.com/images/favicon/favicon-2-32x32.png"
+                            src="https://0x.org/images/favicon/favicon-2-32x32.png"
                             style={{ marginLeft: 0, marginRight: 10 }}
                         />
                         <strong> 0x Sandbox </strong>

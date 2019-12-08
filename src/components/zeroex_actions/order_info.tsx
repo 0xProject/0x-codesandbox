@@ -1,4 +1,5 @@
-import { ContractWrappers, orderHashUtils, OrderInfo, OrderStatus } from '0x.js';
+import { ContractWrappers, OrderInfo, OrderStatus } from '@0x/contract-wrappers';
+import { orderHashUtils } from '@0x/order-utils';
 import { Button, Input, PanelBlock, TextArea } from 'bloomer';
 import * as React from 'react';
 
@@ -25,10 +26,10 @@ export class GetOrderInfo extends React.Component<Props, OrderInfoState> {
             // Parse the Order JSON into types (converting into BigNumber)
             const signedOrder = parseJSONSignedOrder(order);
             // Generate the Order Hash for the order
-            const orderHashHex = orderHashUtils.getOrderHashHex(signedOrder);
+            const orderHash = await orderHashUtils.getOrderHashAsync(signedOrder);
             // call getOrderInfo on the Exchange contract
-            const orderInfo = await contractWrappers.exchange.getOrderInfo.callAsync(signedOrder);
-            this.setState(prev => ({ ...prev, orderHash: orderHashHex, orderInfo }));
+            const orderInfo = await contractWrappers.exchange.getOrderInfo(signedOrder).callAsync();
+            this.setState(prev => ({ ...prev, orderHash, orderInfo }));
         }
     }
     public render(): React.ReactNode {
